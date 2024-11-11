@@ -1,0 +1,45 @@
+.mat-dialog-title {
+    background-color: #4caf50; /* Зеленый цвет фона заголовка */
+    color: white; /* Цвет текста заголовка */
+    font-size: 1.8em; /* Размер шрифта заголовка */
+    padding: 16px; /* Отступы для заголовка */
+    text-align: center; /* Центрирование текста заголовка */
+    border-bottom: 2px solid #388e3c; /* Нижняя граница для акцента */
+}
+
+.mat-dialog-content {
+    background-color: #e8f5e9; /* Светло-зеленый цвет фона содержимого */
+    padding: 20px; /* Отступы для содержимого */
+    font-size: 1.2em; /* Размер шрифта содержимого */
+    text-align: center; /* Центрирование текста содержимого */
+}
+
+.description {
+    margin: 20px 0; /* Отступы для описания */
+    color: #333; /* Цвет текста описания */
+}
+
+.mat-dialog-actions {
+    background-color: #f1f1f1; /* Цвет фона действий */
+    padding: 10px; /* Отступы для действий */
+    display: flex; /* Используем flexbox для выравнивания кнопок */
+    justify-content: center; /* Центрирование кнопок */
+}
+
+button.mat-button {
+    background-color: #4caf50; /* Зеленый цвет фона кнопки */
+    color: white; /* Цвет текста кнопки */
+    margin-left: 10px; /* Отступ между кнопками */
+    border-radius: 5px; /* Закругленные углы кнопки */
+    padding: 10px 20px; /* Внутренний отступ кнопки */
+}
+
+button.mat-button:hover {
+    background-color: #388e3c; /* Темно-зеленый цвет фона кнопки при наведении */
+}
+
+.custom-dialog .mat-dialog-container  {
+    margin-top: 0; /* Устанавливает отступ сверху на 20% */
+    padding: 0; /* Убирает базовый отступ */
+    position: absolute;
+}

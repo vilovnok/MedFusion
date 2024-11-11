@@ -1,0 +1,7 @@
+**/__pycache__
+*.ipynb
+**/.git
+# *.gitignore
+*.venv
+*.csv
+*data_clean

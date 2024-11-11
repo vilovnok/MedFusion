@@ -1,0 +1,40 @@
+version: "3.8"
+
+## weaviate -- будет лучше в контексте retriever
+
+services:
+
+  qdrant:
+      image: qdrant/qdrant:latest
+      ports:
+        - "6654:6333"
+      volumes:
+        - qdrant_storage:/qdrant/storage  
+
+
+  rabbitmq:
+    image: rabbitmq:3.7-management
+    hostname: "rabbit"
+    ports:
+      - "4369:4369"
+      - "5672:5672"
+      - "25672:25672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    # volumes:
+    #   - "rabbitmq_storage:/bitnami"
+  
+
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    ports:
+      - "6380:6379"
+
+volumes:
+  qdrant_storage:
+    driver: local
+  rabbitmq_storage:
+    driver: local
