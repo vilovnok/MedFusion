@@ -19,4 +19,8 @@ def make_celery(app_name=__name__):
     backend = "redis://localhost:6380/0"
     broker  = "amqp://admin:admin@localhost:5672/"
 
-    return Celery(app_name, backend=backend, broker=broker)
+    celery = Celery(app_name, backend=backend, broker=broker)
+    celery.conf.broker_connection_retry_on_startup = True 
+    celery.conf.broker_connection_max_retries = 4
+    celery.conf.broker_connection_retry_delay = 2 
+    return celery

@@ -1,39 +1,25 @@
 <div class="container">
-
     <div class="messages mat-elevation-z5">
-
         <div class="messages-header">
-            <!-- <img  src="assets/bot.jpeg" alt="bot_img"> -->
-            <h2>Ассистент</h2>
+            <h2>Assistent</h2>
         </div>
         <hr>
-        <div class="chatbox">
-            <!-- <div *ngFor="let item of messages" [ngClass]="{
-                    'chat-message-bot': item.type === 'bot',
-                    'chat-message-human': item.type === 'human'
+        <div class="chatbox" #chatbox>
+            <div *ngFor="let item of messages" [ngClass]="{
+                    'chat-message-bot': item.role === 'bot',
+                    'chat-message-human': item.role === 'human'
                 }">
                 <div class="details">
                     <p>{{item.text}}</p>
                 </div>
-            </div> -->
-
-            <!-- <div class="chat-typing" *ngIf="istyping">
-                <p>печатает...</p>
-            </div> -->
+            </div>
         </div>
         <hr>
 
-        
         <div class="wrapper">
             <input type="text" [(ngModel)]="input_text" placeholder="Введите" (keyup.enter)="getDescription()"/>
-            <button (click)="getDescription()"
-                [ngStyle]="{background: isPlaying ? 'white' : (prompt ? 'white' : '#686868')}">
-                <svg *ngIf="isPlaying" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <rect x="6" y="6" width="12" height="12" rx="2"></rect>
-                </svg>
-                <svg *ngIf="!isPlaying" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            <button (click)="getDescription()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                     stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                     <path d="M5 12l14 0"></path>
@@ -43,24 +29,17 @@
             </button>
         </div>
     </div>
-
-    <!-- <div class="info_board">
-        <div class="info_area">
-
-
-        </div>
-    </div> -->
-
+    
     <div class="info_board">
         <div class="info_area">
             <div class="card-container">
-                <div class="card" *ngFor="let topic of topics" (click)="openDialog(topic.title, topic.fullResponse)">
+                <div class="card" *ngFor="let topic of topics" 
+                (click)="openDialog(topic.title, topic.fullResponse)"
+                [ngClass]="{'flashing': topic.flashing}"> 
                     <h3>{{ topic.title }}</h3>
                     <p>{{ topic.description }}</p>
                 </div>
             </div>
         </div>
     </div>
-
-
 </div>

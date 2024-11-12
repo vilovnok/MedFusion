@@ -57,19 +57,22 @@ $font-family: "Roboto Mono", monospace;
 }
 
 .info_area {
-//     padding: 10px;
-    // list-style: none;
     overflow-y: auto;
     height: 32rem; 
-    // height: 200rem;
-//     background-color: $gray;
-//     border-top-left-radius: 8px;
-//     border-top-right-radius: 8px;
-//     border-bottom-left-radius: 8px;
-//     border-bottom-right-radius: 8px;
-//     scrollbar-width: none;
 }
 
+.flashing {
+    animation: flash 0.5s infinite alternate; // Flashing animation
+}
+
+@keyframes flash {
+    0% {
+        background-color: #f9f9f9; // Original background
+    }
+    100% {
+        background-color: #ffcc00; // Flashing background color
+    }
+}
 
 
 
@@ -95,7 +98,7 @@ $font-family: "Roboto Mono", monospace;
 .chatbox {
 
   padding: 15px;
-  list-style: none;
+//   list-style: none;
   overflow-y: auto;
   height: 400px;
   background-color: $gray;
@@ -103,7 +106,7 @@ $font-family: "Roboto Mono", monospace;
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  scrollbar-width: none;
+//   scrollbar-width: none;
 
   .chat-message-bot {
     display: flex;
@@ -128,7 +131,7 @@ $font-family: "Roboto Mono", monospace;
       p {
         border-radius: 18px 18px 0 18px;
         background-color: $orange !important;
-        color: $black;
+        // color: $black;
       }
     }
   }
@@ -139,14 +142,6 @@ $font-family: "Roboto Mono", monospace;
     border-radius: 10px;
     word-wrap: break-word;
     background-color: #eaeaea;
-  }
-
-  .chat-typing p {
-    font-style: italic;
-    color: gray;
-    animation: blink 1s infinite;
-    width: 40%;
-    border-radius: 18px 18px 18px 0;
   }
 
   @keyframes blink {
@@ -160,12 +155,6 @@ $font-family: "Roboto Mono", monospace;
       opacity: 0.5;
     }
   }
-}
-
-.chat-outgoing p {
-  background-color: #162887;
-  align-self: flex-end;
-  color: #fff;
 }
 
 hr {
@@ -213,6 +202,3 @@ hr {
     
   }
 }
-
-
-////////////////////////

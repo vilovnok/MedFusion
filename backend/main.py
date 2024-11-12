@@ -1,8 +1,8 @@
-from backend.schema import  Message
-
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import APIRouter
+
+from backend.schema import  Message
 from backend.worker.tasks import generate_task
 
 
@@ -22,29 +22,12 @@ router = APIRouter(
 )
 
 
-@router.post("/generate")
+@router.post("/retrieve-data")
 async def generate_text(request: Message):    
     task = generate_task.apply_async(args=[request.content])
-    result = task.get(timeout=2)
+    title, description = task.get(timeout=20)
 
-    return {"result": result, "status": 'success'}
-
-
-# @app.post("/v1/agent/number-test")
-# async def number_text():    
-#     task = number_test_task.delay('Нормально, хорошо, отлично')
-#     return {"task_id": task.id, "status": 'success'}
-
-
-# @app.post("/v1/agent/number123-test")
-# async def number_text():    
-#     task = number_topic_task.delay()
-#     return {"task_id": task.id, "status": 'success'}
-
-
-# @app.get("/v1/agent/result/{task_id}")
-# async def task_result(task_id: str):    
-    # return get_task_info(task_id)
+    return {"title": title, "description":description}
 
 
 app.include_router(router)

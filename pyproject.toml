@@ -1,5 +1,6 @@
 [tool.poetry]
 name = "medfusion"
+packages = [{include = "agent"}]
 version = "0.1.0"
 description = ""
 authors = ["vilovnok <vilovnok@gmail.com>"]

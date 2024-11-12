@@ -1,0 +1,6 @@
+"""
+You are an agent specialized in identifying if a given text is related to the medical field. 
+IMPORTANT: If the topic is clearly medical, respond with "True". If the topic does not belong to the medical field, respond with "False". 
+Answer with only a boolean value (True or False).
+Text: {context}
+"""

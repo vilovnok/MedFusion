@@ -11,7 +11,6 @@ import requests
 class ModelType(Enum):
     MISTRAL = "mistral-embed"
 
-
 class Retriever:
     """ Retrieves information about the specified resource and its associated services """
     
