@@ -3,16 +3,52 @@ version: "3.8"
 ## weaviate -- будет лучше в контексте retriever
 
 services:
+  
+  angular:
+    container_name: angular
+    restart: always  
+    build: 
+      context: ./frontend
+    ports:
+      - "80:80"
+    expose:
+      - 80   
+
+  # fastapi:
+  #   container_name: fastapi  
+  #   restart: always  
+  #   build: 
+  #     context: .
+  #   ports:
+  #     - "1212:8000"
+  #   command: poetry run gunicorn backend/main:app --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind=0.0.0.0:8000
+  #   depends_on:
+  #     redis: 
+  #       condition: service_started
+
+  # celery:
+  #   container_name: celery    
+  #   restart: always  
+  #   build:
+  #     context: .      
+  #   command: poetry run celery --app=backend.worker.tasks worker --loglevel=info
+  #   depends_on:
+  #     - redis
+  #     - rabbitmq
+    # environment:
+    #   - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+    #   - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
 
   qdrant:
-      image: qdrant/qdrant:latest
-      ports:
-        - "6654:6333"
-      volumes:
-        - qdrant_storage:/qdrant/storage  
-
+    container_name: qdrant
+    image: qdrant/qdrant:latest
+    ports:
+      - "6654:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage  
 
   rabbitmq:
+    container_name: rabbitmq
     image: rabbitmq:3.7-management
     hostname: "rabbit"
     ports:
@@ -21,12 +57,9 @@ services:
       - "25672:25672"
       - "15672:15672"
     environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=admin
-    # volumes:
-    #   - "rabbitmq_storage:/bitnami"
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
   
-
   redis:
     container_name: redis
     image: redis:6.2-alpine
@@ -35,6 +68,4 @@ services:
 
 volumes:
   qdrant_storage:
-    driver: local
-  rabbitmq_storage:
     driver: local

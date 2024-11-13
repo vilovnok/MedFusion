@@ -1,8 +1,11 @@
 from agent.src import MedFusionLLM
 
+
 hf_token='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'
 model="microsoft/Phi-3-mini-4k-instruct"
-text='Migraine sufferers often experience a combination of intense headaches, nausea, and light sensitivity. New treatments targeting specific neurotransmitters show promise in reducing the frequency of migraine attacks.'
+
+text='New advancements in minimally invasive surgery allow doctors to perform complex procedures with fewer incisions, reducing patient recovery time and minimizing risks associated with traditional open surgery.'
+
 
 if __name__ == "__main__":
     agent = MedFusionLLM(hf_token=hf_token, model=model)

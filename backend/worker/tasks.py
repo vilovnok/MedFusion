@@ -3,9 +3,6 @@ from backend.worker.utils import make_exchange, make_celery, make_queue
 
 from agent.src import MedFusionLLM
 
-import time 
-
-
 
 hf_token='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'
 model="microsoft/Phi-3-mini-4k-instruct"

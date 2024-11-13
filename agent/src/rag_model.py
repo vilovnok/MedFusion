@@ -18,10 +18,10 @@ class MedFusionLLM:
         self._init_prompts()
         self._init_model()
 
+
     def _init_prompts(self):
         self.system_prompt = get_system_prompt()
     
-
     def _init_model(self):
         try:
             self._model_hf = HuggingFaceEndpoint(
@@ -30,16 +30,13 @@ class MedFusionLLM:
                 do_sample=False,
                 repetition_penalty=1.03,
                 huggingfacehub_api_token=self.hf_token
-            )                   
+            )           
             self._model_other = None
         except Exception as err:
             raise ValueError(f'Что-то не так с параметрами модели: {err}')
 
-
     def invoke(self, context: str):
-        query = {"context": context}
-        print(self.system_prompt)
         prompt = ChatPromptTemplate.from_messages([("system", self.system_prompt)])
         map_chain = prompt | self._model_hf | StrOutputParser()
-        output = map_chain.invoke(query)
+        output = map_chain.invoke({"context": context}).split('topic:')[-1]
         return output

@@ -25,7 +25,7 @@ router = APIRouter(
 @router.post("/retrieve-data")
 async def generate_text(request: Message):    
     task = generate_task.apply_async(args=[request.content])
-    title, description = task.get(timeout=20)
+    title, description = task.get(timeout=5)
 
     return {"title": title, "description":description}
 

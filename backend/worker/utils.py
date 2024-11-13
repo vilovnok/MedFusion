@@ -16,8 +16,8 @@ def make_queue(name: str, exchange: Exchange, routing_key: str, durable: bool, a
 
 
 def make_celery(app_name=__name__):
-    backend = "redis://localhost:6380/0"
-    broker  = "amqp://admin:admin@localhost:5672/"
+    backend = "redis://0.0.0.0:6380/0"
+    broker  = "amqp://admin:admin@0.0.0.0:5672/"
 
     celery = Celery(app_name, backend=backend, broker=broker)
     celery.conf.broker_connection_retry_on_startup = True 

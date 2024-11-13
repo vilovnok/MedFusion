@@ -1,7 +1,6 @@
 # MedFusion(backend)
 
 ## Run FastApi
-
 ```bash
 uvicorn backend.main:app  --reload
 ```

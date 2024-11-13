@@ -25,10 +25,8 @@ uvicorn = "^0.32.0"
 kombu = "^5.4.2"
 celery = "^5.4.0"
 redis = "^5.2.0"
+gunicorn = "23.0.0"
 
-
-[tool.poetry.group.dev.dependencies]
-ipykernel = "^6.29.5"
 
 [build-system]
 requires = ["poetry-core"]
