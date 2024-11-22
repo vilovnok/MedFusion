@@ -1,13 +1,13 @@
 from celery.result import AsyncResult
 from backend.worker.utils import make_exchange, make_celery, make_queue
 
-from agent.src import MedFusionLLM
+# from agent.src import MedFusionLLM
 
 
-hf_token='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'
-model="microsoft/Phi-3-mini-4k-instruct"
+# hf_token='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'
+# model="microsoft/Phi-3-mini-4k-instruct"
 
-agent = MedFusionLLM(model=model, hf_token=hf_token)
+# agent = MedFusionLLM(model=model, hf_token=hf_token)
 
 celery = make_celery()
 direct_exchange = make_exchange('direct_exchange', 'direct', False, True)
@@ -24,11 +24,11 @@ task_routes = {
 celery.conf.task_routes = task_routes
 
 
-@celery.task(name='tasks.direct_task')
-def generate_task(content: str): 
-    title = agent.invoke(content)
-    description = ''
-    return title, description
+# @celery.task(name='tasks.direct_task')
+# def generate_task(content: str): 
+#     title = agent.invoke(content)
+#     description = ''
+#     return title, description
 
 
 def get_task_info(task_id):

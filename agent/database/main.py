@@ -1,0 +1,53 @@
+from agent.database.retriever import Retriever, ModelType
+import argparse
+import os
+
+
+
+def ensure_directory_exists(directory_path: str):
+    """
+    Проверяет существование директории и создаёт её при необходимости.
+
+    :param directory_path: Путь к директории.
+    """
+    if not os.path.exists(directory_path):
+        os.makedirs(directory_path)
+        print(f"Директория '{directory_path}' была создана.")
+    else:
+        print(f"Директория '{directory_path}' уже существует.")
+
+
+ensure_directory_exists("dataset")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--act", type=str, required=True)
+    parser.add_argument("--coll_name", type=str, required=True)
+    args = parser.parse_args()
+
+    act = args.act
+    coll_name = args.coll_name
+    
+    retriever = Retriever(
+        model_type=ModelType.DEEPVK_USER, 
+        localhost='77.234.216.100',
+        device=0)
+
+    if act == "create":
+        embedding = retriever.encode(text='Hello, world')
+        retriever.create_database(collection_name=coll_name, embedding=embedding)    
+        print("Коллекция создана!")    
+    elif act == "delete":
+        retriever.delete_database(collection_name=coll_name)
+        print("Коллекция удалена!")    
+    elif act == "upload":
+        retriever.upload_database(collection_name=coll_name)
+        print("Коллекция обновилась!")  
+    elif act == "search":
+        result = retriever.search(
+        query = """What is cranberry juice used for the prevention of urinary tract infections?""",
+        collection_name=coll_name,
+        topk=1)
+
+        for i in result:
+            print(i)         

@@ -2,6 +2,7 @@
 *.ipynb
 **/.git
 *.venv
-*.csv
-*data_clean
-poetry.lock
+*poetry.lock
+/dataset
+*.jsonl
+dataset/dataset.jsonl

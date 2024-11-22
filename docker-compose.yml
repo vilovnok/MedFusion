@@ -4,15 +4,15 @@ version: "3.8"
 
 services:
   
-  angular:
-    container_name: angular
-    restart: always  
-    build: 
-      context: ./frontend
-    ports:
-      - "80:80"
-    expose:
-      - 80   
+  # angular:
+  #   container_name: angular
+  #   restart: always  
+  #   build: 
+  #     context: ./frontend
+  #   ports:
+  #     - "80:80"
+  #   expose:
+  #     - 80   
 
   # fastapi:
   #   container_name: fastapi  
@@ -43,28 +43,28 @@ services:
     container_name: qdrant
     image: qdrant/qdrant:latest
     ports:
-      - "6654:6333"
+      - "6333:6333"
     volumes:
       - qdrant_storage:/qdrant/storage  
 
-  rabbitmq:
-    container_name: rabbitmq
-    image: rabbitmq:3.7-management
-    hostname: "rabbit"
-    ports:
-      - "4369:4369"
-      - "5672:5672"
-      - "25672:25672"
-      - "15672:15672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+  # rabbitmq:
+  #   container_name: rabbitmq
+  #   image: rabbitmq:3.7-management
+  #   hostname: "rabbit"
+  #   ports:
+  #     - "4369:4369"
+  #     - "5672:5672"
+  #     - "25672:25672"
+  #     - "15672:15672"
+  #   environment:
+  #     - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+  #     - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
   
-  redis:
-    container_name: redis
-    image: redis:6.2-alpine
-    ports:
-      - "6380:6379"
+  # redis:
+  #   container_name: redis
+  #   image: redis:6.2-alpine
+  #   ports:
+  #     - "6380:6379"
 
 volumes:
   qdrant_storage:

@@ -3,10 +3,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import APIRouter
 
 from backend.schema import  Message
-from backend.worker.tasks import generate_task
 
+# from backend.worker.tasks import generate_task
+
+from agent.src import MedFusionLLM
+
+
+hf_token='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'
+model="microsoft/Phi-3-mini-4k-instruct"
 
 app = FastAPI(title='MedFusion')
+agent = MedFusionLLM(model=model, hf_token=hf_token)
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -24,8 +32,11 @@ router = APIRouter(
 
 @router.post("/retrieve-data")
 async def generate_text(request: Message):    
-    task = generate_task.apply_async(args=[request.content])
-    title, description = task.get(timeout=5)
+    
+    title = agent.invoke(request.content)
+    description = ''
+    # task = generate_task.apply_async(args=[request.content])
+    # title, description = task.get(timeout=20)
 
     return {"title": title, "description":description}
 
