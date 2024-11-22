@@ -42,9 +42,8 @@ class Retriever:
         self._client = self._setup_database(localhost=localhost, port=port, grpc_port=grpc_port)        
 
     
-
     def _setup_model(self):
-        
+        """Initialization for the model"""
         if self._model_type == ModelType.DEEPVK_USER:
             model = SentenceTransformer(
                 ModelType.DEEPVK_USER.value,
@@ -57,7 +56,8 @@ class Retriever:
 
         return model
         
-    def _setup_database(self, localhost: str, port: int, grpc_port: int):        
+    def _setup_database(self, localhost: str, port: int, grpc_port: int):     
+        """ Initialization for the database """   
         if not requests.get(f'http://{localhost}:{port}'):
             raise Exception(f'Qdrant server is not running at http://{localhost}:{port}')
             
@@ -72,16 +72,14 @@ class Retriever:
 
 
     def encode(self,  text: Union[List[str], str]):
-
+        """ Encoder for text """
         if self._model_type == ModelType.MISTRAL:        
             embeddings = self._model.embeddings.create(
                 model=self.model_type,
                 inputs=text
             )        
-
         elif self._model_type == ModelType.DEEPVK_USER:
             embeddings = self._model.encode(text, normalize_embeddings=True)
-
         else:
             raise NotImplementedError()
         
@@ -108,7 +106,6 @@ class Retriever:
 
     def delete_database(self, collection_name: str):
         """ Delete the database """
-
         try:
             self._client.delete_collection(collection_name=collection_name)
         finally:
@@ -118,17 +115,14 @@ class Retriever:
 
     def read_dataset(self):
         """ Read the file """
-
         with open(self.dataset_dir, 'r') as file:
             data = [json.loads(line) for line in file]
 
         return data
 
 
-
     def splitter(self, content):    
-        """ Разбивает текст на части """
-
+        """ Splits the text into chunks """
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, 
                                                        chunk_overlap=200, 
                                                        add_start_index=True)
@@ -139,15 +133,12 @@ class Retriever:
 
     def upload_database(self, collection_name: str):
         """ Upload data to database """
-
         dataset = self.read_dataset()
         count = -1
 
         try:
             length = len(dataset)
-
             for i in tqdm(range(length)):
-
                 content = dataset[i]['content']
                 metadata = dataset[i]['metadata']
                 
@@ -183,6 +174,7 @@ class Retriever:
             filter_options: dict = None,
             score_threshold: float = None
         ):
+        """ Search for a similar context """
         try:
             embedding = self.encode(query)
             results = self._client.search(
@@ -197,8 +189,7 @@ class Retriever:
                 ) if filter_options else None,
                 score_threshold=score_threshold
             )
-
             return results
         finally:
             if hasattr(self._client, 'close'):
-                self._client.close() 
+                self._client.close()

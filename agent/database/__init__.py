@@ -1,1 +1,1 @@
-from .retriever import Retriever, ModelType
+from .retriever import Retriever

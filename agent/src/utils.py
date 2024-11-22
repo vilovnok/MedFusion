@@ -1,5 +1,12 @@
 import yaml
 
+from enum import Enum
+
+
+class ModelType(Enum):
+    MISTRAL = "mistral-embed"
+    MICROSOFT = "microsoft/Phi-3-mini-4k-instruct"
+
 def get_model_info(model_name):
     with open('agent/config/env.yaml', 'r') as file:
         config = yaml.safe_load(file)
@@ -9,6 +16,6 @@ def get_model_info(model_name):
     return None  
 
 def get_system_prompt():
-    with open('agent/prompts/system_prompt.txt', 'r') as file:
+    with open('agent/src/prompts/system_prompt.txt', 'r') as file:
         prompt = file.read()
     return prompt

@@ -1,20 +1,7 @@
-from agent.database.retriever import Retriever, ModelType
 import argparse
-import os
 
-
-
-def ensure_directory_exists(directory_path: str):
-    """
-    Проверяет существование директории и создаёт её при необходимости.
-
-    :param directory_path: Путь к директории.
-    """
-    if not os.path.exists(directory_path):
-        os.makedirs(directory_path)
-        print(f"Директория '{directory_path}' была создана.")
-    else:
-        print(f"Директория '{directory_path}' уже существует.")
+from agent.database.retriever import Retriever, ModelType
+from agent.database.utils import ensure_directory_exists
 
 
 ensure_directory_exists("dataset")
