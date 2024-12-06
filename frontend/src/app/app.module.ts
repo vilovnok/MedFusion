@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -12,6 +12,8 @@ import { ChatComponent } from './chat/chat.component';
 import { TopicDialogComponent } from './topic-dialog/topic-dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
+import { DialogComponent } from './dialog/dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     ToolbarComponent,
     MainComponent,
     ChatComponent,
-    TopicDialogComponent    
+    
+    TopicDialogComponent,
+    DialogComponent    
   ],
   imports: [
     BrowserModule,
@@ -30,6 +34,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatDialogModule
   ],
   providers: [UserService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

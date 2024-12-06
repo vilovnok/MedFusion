@@ -2,6 +2,10 @@
     <div class="messages mat-elevation-z5">
         <div class="messages-header">
             <h2>Assistent</h2>
+            <div class="status-indicator">
+                <span class="circle"></span>
+                <button style="cursor: pointer;" (click)="checkNetwork()">Подключиться</button>
+            </div>
         </div>
         <hr>
         <div class="chatbox" #chatbox>
@@ -27,19 +31,6 @@
                     <path d="M13 6l6 6"></path>
                 </svg>
             </button>
-        </div>
-    </div>
-    
-    <div class="info_board">
-        <div class="info_area">
-            <div class="card-container">
-                <div class="card" *ngFor="let topic of topics" 
-                (click)="openDialog(topic.title, topic.fullResponse)"
-                [ngClass]="{'flashing': topic.flashing}"> 
-                    <h3>{{ topic.title }}</h3>
-                    <p>{{ topic.description }}</p>
-                </div>
-            </div>
         </div>
     </div>
 </div>

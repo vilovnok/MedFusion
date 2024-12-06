@@ -11,10 +11,8 @@ $font-family: "Roboto Mono", monospace;
 
 .container {
   display: flex;
-//   height: calc(100vh - 10px);
-  flex-direction: raw;
-//   align-items: center;
-
+  flex-direction: raw;  
+  align-items: center;
 }
 
 .messages {
@@ -26,25 +24,65 @@ $font-family: "Roboto Mono", monospace;
   padding: 24px;
 }
 
-
-.card-container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+.status-indicator {
+  display: flex;
+  align-items: center;
 }
+
+.circle {
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  margin-right: 8px;
+  transition: background-color 0.3s;
+}
+.messages-header {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.messages-header h2 {font-size: 1.5em;}
+
 
 .card {
-    flex: 1 1 calc(33.33% - 10px);
-    cursor: pointer;
-    margin: 5px; 
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ccc; 
-    border-radius: 5px; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
 
+
+
+
+.details h3 {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+.details p {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.check-network {
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1em;
+  margin-top: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.check-network:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
 
 
 .info_board {
