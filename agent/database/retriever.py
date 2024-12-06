@@ -19,7 +19,7 @@ import json
 from tqdm import tqdm
 
 
-class ModelType(Enum):
+class DenseModelType(Enum):
     MISTRAL = "mistral-embed"
     DEEPVK_USER = "deepvk/USER-bge-m3"
     MiniLM_L6 = 'sentence-transformers/multi-qa-MiniLM-L6-cos-v1'
@@ -35,7 +35,7 @@ class Retriever:
     """ Retrieves information about the specified resource and its associated services """
     
     def __init__(self,                  
-                 model_type: ModelType,
+                 model_type: DenseModelType,
                  sparse_model_type: SparseModelType,
                  localhost: str='0.0.0.0',
                  port: int=6333,
@@ -63,7 +63,7 @@ class Retriever:
     
     def _setup_model(self):
         """Initialization for the model"""
-        if self._model_type == ModelType.MISTRAL:
+        if self._model_type == DenseModelType.MISTRAL:
             model = Mistral(api_key=self.api_key)
         else:
             model = HuggingFaceEmbeddings(
@@ -100,7 +100,7 @@ class Retriever:
 
     def encode(self,  text: Union[List[str], str]):
         """ Encoder for text """
-        if self._model_type == ModelType.MISTRAL:        
+        if self._model_type == DenseModelType.MISTRAL:        
             embeddings = self._model.embeddings.create(
                 model=self.model_type,
                 inputs=text

@@ -1,6 +1,6 @@
 import argparse
 
-from agent.database.retriever import Retriever, ModelType, SparseModelType
+from agent.database.retriever import Retriever, DenseModelType, SparseModelType
 from agent.database.utils import ensure_directory_exists
 
 
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     sparse_search = args.sparse
     
     retriever = Retriever(
-        model_type=ModelType.E5_LARGE,
+        model_type=DenseModelType.E5_LARGE,
         sparse_model_type=SparseModelType.BM42,
         localhost="localhost",#'77.234.216.100',
         device=0,
