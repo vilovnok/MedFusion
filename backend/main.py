@@ -8,6 +8,7 @@ from backend.schema import  Message, Healhcheck
 # from backend.worker.tasks import generate_task
 
 from agent.src import MedFusionLLM
+from agent.src.utils import ModelType
 
 
 hf_token = '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'
@@ -32,8 +33,8 @@ router = APIRouter(
 
 @router.post("/retrieve-data")
 async def generate_text(request: Message):   
-    agent = MedFusionLLM(model_name=model_name, hf_token=hf_token, api_key=request.api_key)     
-    text = agent.invoke(content=request.content)
+    agent = MedFusionLLM(model_type=ModelType.MISTRAL, hf_token=hf_token, api_key=request.api_key)     
+    text = agent.invoke(content=request.content, messages=request.messages)
 
     return {"text": text}
 
@@ -41,7 +42,7 @@ async def generate_text(request: Message):
 @router.post("/healthcheck")
 async def healthcheck(request: Healhcheck):    
     try:
-        agent = MedFusionLLM(model_name=model_name, api_key=request.api_key)        
+        agent = MedFusionLLM(model_type=ModelType.MISTRAL, api_key=request.api_key)        
         test_prompt = "Проверка подключения к модели."
         response = agent.invoke(test_prompt)
         

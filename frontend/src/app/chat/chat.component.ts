@@ -68,7 +68,8 @@ export class ChatComponent implements OnInit {
 
     const reqBody = {
       "api_key": this.service.getFromLS('api_key'), 
-      "content": content_h 
+      "content": content_h,
+      "messages": this.getLastQueryResponses()
     }
 
     this.service.handle_post_requests(reqBody, 'agent/retrieve-data').subscribe(async response => {
@@ -132,7 +133,7 @@ export class ChatComponent implements OnInit {
 
   private saveQueryResponse(userText: string, aiResponse: string): void {
     let queryResponses = JSON.parse(localStorage.getItem('queryResponses') || '[]');  
-    queryResponses.unshift({ human: userText, ai: aiResponse });  
+    queryResponses.unshift({ human: userText, bot: aiResponse });  
     if (queryResponses.length > 3) {
       queryResponses.pop();
     }  
