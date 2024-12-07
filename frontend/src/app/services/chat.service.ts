@@ -15,11 +15,20 @@ export class ChatService {
     return this.http.post<string>(this.address, { message });
   }
 
-
+  handle_get_requests(endpoint: string) {
+    return this.http.get<any>(`${this.address}/${endpoint}`)
+  }
   handle_post_requests(userObject: any, endpoint: string) {
-    console.log(userObject);
     return this.http.post<any>(`${this.address}/${endpoint}`, userObject)
   }
 
-
+  saveToLS(title: string, value: string) {
+    return localStorage.setItem(title, value);
+  }
+  getFromLS(title: string) {
+    return localStorage.getItem(title) || "";
+  }
+  rmFromLS(title: string): void {
+    localStorage.removeItem(title);
+  }
 }

@@ -3,8 +3,8 @@ import yaml
 from enum import Enum
 
 
-class ModelType(Enum):
-    MISTRAL = "mistral-embed"
+class ModelName(Enum):
+    MISTRAL = "mistral-large-latest"
     MICROSOFT = "microsoft/Phi-3-mini-4k-instruct"
 
 def get_model_info(model_name):

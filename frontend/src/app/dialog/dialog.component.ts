@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ChatService } from '../services/chat.service';
 
 @Component({
   selector: 'app-dialog',
@@ -8,14 +9,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class DialogComponent implements OnInit {
   constructor(public dialogRef: MatDialogRef<DialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private service: ChatService
+  ) { }
 
-    key: string = '';
-
+    api_key: string = '';
 
   ngOnInit(): void {}
 
-  onNoClick(): void {
+  onClose(): void {
     this.dialogRef.close();
   }
 }

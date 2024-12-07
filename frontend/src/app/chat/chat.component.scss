@@ -1,6 +1,9 @@
 $white: #E5E5E5;
 $black: rgb(26, 26, 26);
 $gray: #262a2f;
+
+$gray_back: #242629;
+
 $gray_light: #686868;
 $orange: #ff5533;
 $font-family: "Roboto Mono", monospace;
@@ -11,48 +14,56 @@ $font-family: "Roboto Mono", monospace;
 
 .container {
   display: flex;
-  flex-direction: raw;  
+  align-items: center;
+  justify-content: center;
   align-items: center;
 }
 
 .messages {
-  width: 30%;
-  margin: 16px;
-  margin-top: 8%;
-  background: $black;
-  border-radius: 16px;
-  padding: 24px;
+  width: 44%;
+  margin-top: 6%;
 }
 
-.status-indicator {
-  display: flex;
-  align-items: center;
-}
-
-.circle {
-  width: 10px;
-  height: 10px;
-  background-color: red;
-  border-radius: 50%;
-  margin-right: 8px;
-  transition: background-color 0.3s;
-}
 .messages-header {
   flex-direction: row;
   justify-content: space-between;
+
+  display: flex;
+  margin-bottom: 8px;
+  
+  h2 {
+    font-size: 1.5em;
+    margin: 0;
+    color: $orange;
+  }
+  img {
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 16px;
+    height: 35px;
+  }
+
+  .status-indicator {
+    display: flex;
+    align-items: center;
+  }
+  .circle {
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+    margin-right: 8px;
+    transition: background-color 0.3s;
+  }
+
+  .circle-red {
+    background: red;
+  }
+  
+  .circle-green {
+    background: green;
+  }
 }
-
-.messages-header h2 {font-size: 1.5em;}
-
-
-.card {
-  background: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
-
-
 
 
 
@@ -66,43 +77,6 @@ $font-family: "Roboto Mono", monospace;
   font-size: 0.9em;
 }
 
-.check-network {
-  background-color: #4caf50;
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 1em;
-  margin-top: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.check-network:hover {
-  background-color: #45a049; /* Darker green on hover */
-}
-
-
-.info_board {
-    background: $black;
-    padding: 8px;
-    margin: 16px;
-    margin-top: 8%;
-    width: calc(100% - 20px);
-    border-radius: 16px;
-}
-
-.info_area {
-    overflow-y: auto;
-    height: 32rem; 
-}
-
-.flashing {
-    animation: flash 0.5s infinite alternate; // Flashing animation
-}
-
 @keyframes flash {
     0% {
         background-color: #f9f9f9; // Original background
@@ -112,67 +86,15 @@ $font-family: "Roboto Mono", monospace;
     }
 }
 
-
-
-/////////////////////////////////////////////////////////////////////
-.messages-header {
-
-  display: flex;
-  margin-bottom: 8px;
-
-  img {
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 16px;
-    height: 35px;
-  }
-
-  h2 {
-    margin: 0;
-    color: $orange;
-  }
-}
-
 .chatbox {
-
   padding: 15px;
-//   list-style: none;
   overflow-y: auto;
-  height: 400px;
-  background-color: $gray;
+  height: 64vh;
+  background-color: $gray_back;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-//   scrollbar-width: none;
-
-  .chat-message-bot {
-    display: flex;
-
-    .details {
-      margin-right: auto;
-      max-width: calc(100% - 130px);
-
-      p {
-        border-radius: 18px 18px 18px 0;
-      }
-    }
-  }
-
-  .chat-message-human {
-    display: flex;
-
-    .details {
-      margin-left: auto;
-      max-width: calc(100% - 130px);
-
-      p {
-        border-radius: 18px 18px 0 18px;
-        background-color: $orange !important;
-        // color: $black;
-      }
-    }
-  }
 
   p {
     margin: 10px 0 0px 0;
@@ -180,6 +102,35 @@ $font-family: "Roboto Mono", monospace;
     border-radius: 10px;
     word-wrap: break-word;
     background-color: #eaeaea;
+  }
+
+  .chat-message-bot {
+    display: flex;
+    .details {
+      margin-right: auto;
+      max-width: calc(100% - 130px);
+
+      p {
+        font-weight: 400px;
+        color: $gray_back;
+        border-radius: 18px 18px 18px 0;
+      }
+    }
+  }
+
+  .chat-message-human {
+    display: flex;
+    .details {      
+      margin-left: auto;
+      max-width: calc(100% - 130px);
+
+      p {
+        border-radius: 18px 18px 0 18px;
+        font-weight: 400px;
+        color: $gray_back;
+        background-color: $orange !important;
+      }
+    }
   }
 
   @keyframes blink {
@@ -202,41 +153,71 @@ hr {
   border-top: 1px solid $orange;
 }
 
-.wrapper {
-  width: 400px;
-  max-width: 100%;
-  position: relative;
 
-  margin-top: 20px;
+.input_block {
   display: flex;
-  align-items: center;
+  justify-content: center;
+  background-color: $gray;
 
-  input {
-    color: $white;
-    font-size: 16px;
-    background: $gray;
-    border: 1px solid $gray_light;
-    border-radius: 50px;
-    padding: 10px 16px;
+  .chat-container {            
     width: 100%;
-    outline: none;
-  }
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 
-  button {
-    background: $gray_light;
-    border-radius: 50px;
-    aspect-ratio: 1;
-    height: 80%;
-    position: absolute;
-    top: 10%;
-    right: 5px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    background-color: $black;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;   
 
-    &:hover {
-      opacity: 0.8;
+    textarea {
+      flex-grow: 1;
+      border: none;
+      resize: none;
+      outline: none;
+      line-height: 1.5;
+      padding: 10px;       
+      background: none;         
+      color: white;
+      font-weight: 14px;
+      word-wrap: break-word;
     }
+    textarea::-webkit-scrollbar-track {
+      background-color: $gray;
+      border-radius: 6px;
+    }
+    textarea::placeholder {
+      color: #b0b0b0;
+    }
+
+    .textarea-container {
+      padding: 10px;
+      display: flex;
+      justify-content: right;
     
+      button {
+        margin-left: 10px;
+        background: #ffff;
+        border-radius: 50px;
+        aspect-ratio: 1;
+        right: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
   }
+}
+
+.chat-typing p {
+  font-style: italic;
+  color: gray;
+  animation: blink 1s infinite;
+  width: 20%;
+  border-radius: 18px 18px 18px 0;
 }

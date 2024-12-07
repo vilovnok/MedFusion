@@ -1,36 +1,45 @@
 <div class="container">
-    <div class="messages mat-elevation-z5">
+    <div class="messages">
         <div class="messages-header">
             <h2>Assistent</h2>
             <div class="status-indicator">
-                <span class="circle"></span>
-                <button style="cursor: pointer;" (click)="checkNetwork()">Подключиться</button>
-            </div>
-        </div>
-        <hr>
-        <div class="chatbox" #chatbox>
-            <div *ngFor="let item of messages" [ngClass]="{
-                    'chat-message-bot': item.role === 'bot',
-                    'chat-message-human': item.role === 'human'
-                }">
-                <div class="details">
-                    <p>{{item.text}}</p>
-                </div>
+                <span
+                [ngClass]="{'circle-red': !isPlaye, 'circle-green': isPlaye}"
+                class="circle"></span>
+                <button style="cursor: pointer;" (click)="showDialog()">Подключиться</button>
             </div>
         </div>
         <hr>
 
-        <div class="wrapper">
-            <input type="text" [(ngModel)]="input_text" placeholder="Введите" (keyup.enter)="getDescription()"/>
-            <button (click)="getDescription()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <path d="M5 12l14 0"></path>
-                    <path d="M13 18l6 -6"></path>
-                    <path d="M13 6l6 6"></path>
-                </svg>
-            </button>
+        <div class="chatbox" #chatbox>
+            <div *ngFor="let item of messages" [ngClass]="{
+                    'chat-message-bot': item.role === 'bot',
+                    'chat-message-human': item.role === 'human'}">
+                <div class="details">
+                    <p>{{item.text}}</p>
+                </div>
+            </div>
+            <div class="chat-typing " *ngIf="istyping">
+                <p>печатает...</p>
+            </div>
+        </div>
+
+        <div class="input_block">
+            <div class="chat-container">            
+                <textarea rows="2" [(ngModel)]="input_text" placeholder="Cообщить MedFusion" (keyup.enter)="generate()"></textarea>
+                <div class="textarea-container">    
+                    <button (click)="generate()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 12l14 0"></path>
+                            <path d="M13 18l6 -6"></path>
+                            <path d="M13 6l6 6"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
