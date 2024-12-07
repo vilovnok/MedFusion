@@ -69,7 +69,7 @@ export class ChatComponent implements OnInit {
     const reqBody = {
       "api_key": this.service.getFromLS('api_key'), 
       "content": content_h,
-      "messages": this.getLastQueryResponses()
+      "history": this.getLastQueryResponses()
     }
 
     this.service.handle_post_requests(reqBody, 'agent/retrieve-data').subscribe(async response => {
@@ -115,7 +115,6 @@ export class ChatComponent implements OnInit {
 
         this.service.handle_post_requests(reqBody, 'agent/healthcheck').subscribe(async response => {
           if (response['status'] == 'success') this.isPlaye = true;
-          console.log('ok');
           this.service.saveToLS('api_key',api_key);
         }, 
           error => {
@@ -130,20 +129,21 @@ export class ChatComponent implements OnInit {
     });
   }
 
-
   private saveQueryResponse(userText: string, aiResponse: string): void {
-    let queryResponses = JSON.parse(localStorage.getItem('queryResponses') || '[]');  
-    queryResponses.unshift({ human: userText, bot: aiResponse });  
-    if (queryResponses.length > 3) {
+    let queryResponses = JSON.parse(localStorage.getItem('queryResponses') || '[]');
+    const newQueryResponse = `Human: ${userText}\nAI: ${aiResponse}`;
+    queryResponses.unshift(newQueryResponse);
+  
+    if (queryResponses.length > 4) {
       queryResponses.pop();
-    }  
+    }
+  
     localStorage.setItem('queryResponses', JSON.stringify(queryResponses));
   }
   
-  private getLastQueryResponses(): { human: string, bot: string }[] {
+  private getLastQueryResponses(): string[] {
     return JSON.parse(localStorage.getItem('queryResponses') || '[]');
   }
-
   checkToken() {
     if (!this.service.getFromLS('api_key')){
       this.showDialog();      

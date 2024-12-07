@@ -1,19 +1,12 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi import APIRouter
 from fastapi import HTTPException
-
-from backend.schema import  Message, Healhcheck
-
-# from backend.worker.tasks import generate_task
-
 from agent.src import MedFusionLLM
 from agent.src.utils import ModelType
+from backend.schema import  Message, Healhcheck
+from fastapi.middleware.cors import CORSMiddleware
 
-
-hf_token = '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'
-model_name = "mistral-large-latest"
-# api_key = 'b1u1hPaEICv5ReGjc0ROdnaUqV1ok1Zw'
+# b1u1hPaEICv5ReGjc0ROdnaUqV1ok1Zw xrx8WFJkVRiyqeCJiAiUaeBQttXRjbeh
 
 app = FastAPI(title='MedFusion')
 
@@ -33,18 +26,19 @@ router = APIRouter(
 
 @router.post("/retrieve-data")
 async def generate_text(request: Message):   
-    agent = MedFusionLLM(model_type=ModelType.MISTRAL, hf_token=hf_token, api_key=request.api_key)     
-    text = agent.invoke(content=request.content, messages=request.messages)
-
-    return {"text": text}
+    agent = MedFusionLLM(model_type=ModelType.MISTRAL, api_key=request.api_key)     
+    chat_history = " ".join(story for story in list(reversed(request.history)))
+    response = agent.invoke(user_input=request.content, chat_history=chat_history)
+    
+    return {"text": response}
 
 
 @router.post("/healthcheck")
 async def healthcheck(request: Healhcheck):    
     try:
         agent = MedFusionLLM(model_type=ModelType.MISTRAL, api_key=request.api_key)        
-        test_prompt = "Проверка подключения к модели."
-        response = agent.invoke(test_prompt)
+        test_prompt = "проверка"
+        response = agent.healthcheck(test_prompt)
         
         if response and response.strip():
             return {"status": "success", "message": "Модель подключена и работает корректно."}
