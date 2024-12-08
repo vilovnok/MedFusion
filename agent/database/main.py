@@ -4,7 +4,7 @@ from agent.database.retriever import Retriever, DenseModelType, SparseModelType
 from agent.database.utils import ensure_directory_exists
 
 
-ensure_directory_exists("dataset")
+ensure_directory_exists("C:\\Users\\Maxim\\Desktop\\hw\\LLM_basic\\project\\code\\qdrant\\MedFusion\\dataset")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

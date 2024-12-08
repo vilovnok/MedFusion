@@ -41,7 +41,7 @@ class Retriever:
                  port: int=6333,
                  grpc_port: int=6334,
                  api_key: str=None,
-                 dataset_dir: str='./dataset/dataset.jsonl',
+                 dataset_dir: str='C:\\Users\\Maxim\\Desktop\\hw\\LLM_basic\\project\\code\\qdrant\\MedFusion\\dataset\\dataset.jsonl',
                  device: int = 0,
                  dense_search=True,
                  sparse_search=True,
@@ -158,6 +158,7 @@ class Retriever:
                                                        chunk_overlap=200, 
                                                        add_start_index=True)
         chunks = text_splitter.split_text(content)
+        chunks = [chank for chank in chunks if len(chank)>200]
         return chunks
 
 

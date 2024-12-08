@@ -9,6 +9,14 @@ from agent.src.med_prompts import get_prompt
 
 from langchain_mistralai import ChatMistralAI
 
+from sentence_transformers import CrossEncoder
+
+model = CrossEncoder(
+    "jinaai/jina-reranker-v2-base-multilingual",
+    automodel_args={"torch_dtype": "auto"},
+    trust_remote_code=True,
+)
+
 # @tool
 # def medical_retriever(query) -> str:
 #     """Searches data by query in the database of medical documents from the cochrane library.
@@ -37,17 +45,23 @@ Some documents don't contain relevant information, you need to be smart and care
         sparse_search=False,#False
     )
     
-    coll_name="med_db_e5_large"#"med_db_e5_large_bm42"
+    coll_name="med_db_e5_large_longer200"#"med_db_e5_large"#"med_db_e5_large_bm42"
     
     replies = retriever.search(
         query = query,
         collection_name=coll_name,
-        topk=3,
-        score_threshold=0,
+        topk=30,
+        score_threshold=0.7,
     )
 
     if replies:
-        return '\n\n'.join([f'Text {i+1}: '+reply[0].page_content for i, reply in enumerate(replies)]) #, [reply[0].metadata for reply in replies]
+        # sentence_pairs = [[query, doc[0].page_content] for doc in replies]
+        # scores = model.predict(sentence_pairs, convert_to_tensor=True).tolist()
+        
+        rankings = model.rank(query, [doc[0].page_content for doc in replies], return_documents=True, convert_to_tensor=True)[:3]
+        
+        return '\n\n'.join([f"Score: {ranking['score']:.4f}, Metadata: {[v for k,v in replies[ranking['corpus_id']][0].metadata.items() if k in ['title', 'authors', 'publication_date', 'doi_link']]}, Text: {ranking['text']}" for ranking in rankings])
+        #return '\n\n'.join([f'Text {i+1}: '+reply[0].page_content for i, reply in enumerate(replies)]) #, [reply[0].metadata for reply in replies]
     else:
         return 'There is no information for your request in database.'
 
