@@ -219,12 +219,7 @@ class Retriever:
             results = self.vector_store.similarity_search_with_score(
                 query=query,
                 k=topk,
-                filter=models.Filter(
-                    must=[
-                        models.FieldCondition(key=k, match=models.MatchValue(value=v))
-                        for k, v in filter_options.items()
-                    ]
-                ) if filter_options else None,
+                filter=filter_options,
                 score_threshold=score_threshold,
             )
             return results

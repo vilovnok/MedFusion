@@ -7,6 +7,7 @@ from tqdm.contrib.concurrent import process_map
 from tqdm import tqdm
 from multiprocessing import cpu_count
 import json
+import os
 
 def fetch_page_content(url):
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -350,17 +351,17 @@ def fourth():
     
     
 if __name__ == "__main__":
-    first()
+    #first()
 
-    latest_versions = second_prep()
-    updated_versions = process_map(
-        search_new_versions, list(latest_versions.items()), max_workers=os.cpu_count(), chunksize=1
-    )
-    second(updated_versions, latest_versions)
+    # latest_versions = second_prep()
+    # updated_versions = process_map(
+    #     search_new_versions, list(latest_versions.items()), max_workers=os.cpu_count()//2, chunksize=1
+    # )
+    # second(updated_versions, latest_versions)
 
     with open('latest_article_links.txt', 'r') as f:
         urls = f.readlines()
-    results = process_map(parse_json, urls, max_workers=os.cpu_count(), chunksize=1)
+    results = process_map(parse_json, urls, max_workers=os.cpu_count()//2, chunksize=1)
     third(results)
     
     fourth()

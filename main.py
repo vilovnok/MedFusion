@@ -2,13 +2,13 @@ from agent.src import *#MedFusionLLM
 from agent.src.utils import ModelType
 
 import os
-os.environ['MISTRAL_TOKEN'] = 'gUuOZlGmF6xZZoDDNT8L7oteKUjEoVsX'
+os.environ['MISTRAL_TOKEN'] = 'qiKjqSBgsTaKdlszxkx8H52qsHAzjfYn'
 
 
 agent = MedFusionLLM(model_type=ModelType.MISTRAL, token=os.environ.get("MISTRAL_TOKEN"))
 
 def main():
-    print("Welcome to the Paphos City Information Bot! Type 'exit' to quit.\n")
+    print("Welcome to the MedFusion Bot! Type 'exit' to quit.\n")
     while True:
         user_input = input("User: ")
         
@@ -20,8 +20,11 @@ def main():
             break
         
         #response = agent.test_retriever(user_input)
-        response = agent.invoke(user_input, chat_history)
+        response, metadata = agent.invoke(user_input, chat_history)
+        #response = agent.test_article_retriever(user_input)
         print(response)
+        for i, meta in enumerate(metadata):
+            print(f'Links {i+1}:\n{meta}')
 
 if __name__ == '__main__':
     main()
