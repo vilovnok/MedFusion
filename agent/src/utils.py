@@ -3,7 +3,7 @@ from enum import Enum
 
 
 class ModelType(Enum):
-    MISTRAL = "mistral-large-latest"
+    MISTRAL = "mistral-large-2407"
     MICROSOFT = "microsoft/Phi-3-mini-4k-instruct"
 
 def get_model_info(model_name):
