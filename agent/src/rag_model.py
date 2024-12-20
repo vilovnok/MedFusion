@@ -33,13 +33,13 @@ Some documents don't contain relevant information, you need to be smart and care
     retriever = Retriever(
         model_type=DenseModelType.E5_LARGE,
         sparse_model_type=SparseModelType.BM42,
-        localhost="localhost",#'77.234.216.100',
+        localhost='77.234.216.100',
         device=0,
         dense_search=True,
         sparse_search=False,#False
     )
     
-    coll_name="med_db_e5_large"#"med_db_e5_large_bm42"
+    coll_name="medfusion"
     
     replies = retriever.search(
         query = query,
@@ -78,9 +78,13 @@ class MedFusionLLM:
                     do_sample=False,
                     repetition_penalty=1.03,
                     huggingfacehub_api_token=self.hf_token
+
                 )          
             elif self._model_type == ModelType.MISTRAL:
-                llm = ChatMistralAI(api_key=self.api_key, model="mistral-large-latest", timeout=30)
+                llm = ChatMistralAI(api_key=self.api_key, 
+                                    model="mistral-large-latest", 
+                                    timeout=120,                                    
+                                )
                 
             template = PromptTemplate.from_template(get_prompt())
             tools = [medical_retriever] #query_paraphraze
@@ -98,12 +102,13 @@ class MedFusionLLM:
             response = self._agent_executor({"input": user_input, 'chat_history': chat_history})['output']
             return response
         except Exception as e:
+            print(e)
             return f"\nI'm sorry, I encountered an error while processing your request. Please try again.\nError: {e}\n"
     
     def healthcheck(self, content:str):
         try:
             llm = ChatMistralAI(api_key=self.api_key, model="mistral-large-latest", timeout=30)
-            prompt = ChatPromptTemplate.from_messages([("system", 'none')])
+            prompt = ChatPromptTemplate.from_messages([("system", 'ничего кроме 1-го слова выдай')])
             chain = prompt | llm | StrOutputParser()
             output = chain.invoke({"content": content})
             return output

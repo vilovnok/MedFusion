@@ -1,7 +1,6 @@
 <h1 mat-dialog-title>Подключение к модели</h1>
 <div mat-dialog-content>
-  Вы не подключены к модели <span style="color: red;">Mistrial</span>.
-  Пожалуйста, выполните подключение и дождитесь смены цвета на зеленый.
+  {{this.di_text}}
   <mat-form-field appearance="fill">    
     <p style="padding-top: 10px; margin: 0; font-size: 14px;"><mat-label>Ключ подключения</mat-label></p>
     <input style="padding: 0; margin: 0;" matInput [(ngModel)]="api_key" name="api_key" placeholder="Введите ключ">

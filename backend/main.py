@@ -48,3 +48,7 @@ async def healthcheck(request: Healhcheck):
         raise HTTPException(status_code=500, detail=f"Непредвиденная ошибка: {e}")
 
 app.include_router(router)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

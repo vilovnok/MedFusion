@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './register/register.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { ChatComponent } from './chat/chat.component';
+import { LoginComponent } from './login/login.component';
 
 const routes: Routes = [
   { 
@@ -12,11 +13,11 @@ const routes: Routes = [
     path: "reg", component: RegisterComponent, title: "MedFusion"
   },
   {
-    path: "agent", component: ChatComponent, title: "Agent"
+    path: "agent", component: ChatComponent, title: "MedFusion"
   },
-  // {
-  //   path: "forgot-password", component: ForgotPasswordComponent, title: "Forgot password"
-  // },
+  {
+    path: "login", component: LoginComponent, title: "MedFusion"
+  },
   // {
   //   path: "verify", component: VerifyComponent, title: "Verify"
   // },

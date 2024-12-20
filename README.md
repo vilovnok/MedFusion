@@ -12,6 +12,16 @@ poetry shell
 docker compose up -d qdrant
 ```
 
+## Create tables postgres
+```bash
+poetry run python -m backend.src.migration.main --action create
+poetry run python -m backend.src.migration.main --action drop
+```
+## Run
+```bash
+poetry run python -m backend.src.main
+```
+
 ## Run backend
 Make sure that the agent is working correctly.
 FastAPI

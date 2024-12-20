@@ -23,14 +23,13 @@ $font-family: "Roboto Mono", monospace;
 
 .block .content {
   position: absolute;
-  top: 50%;
+  top: 40.1%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
 
 .block .content .section_reg {
-  margin-top: 5%;
   min-width: 400px;
   width: 30%;
   height: min-content;

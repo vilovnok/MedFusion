@@ -6,14 +6,14 @@
                 <span
                 [ngClass]="{'circle-red': !isPlaye, 'circle-green': isPlaye}"
                 class="circle"></span>
-                <button style="cursor: pointer;" (click)="showDialog()">Подключиться</button>
+                <button style="cursor: pointer;" (click)="showDialog('1')">Подключиться</button>
             </div>
         </div>
         <hr>
 
         <div class="chatbox" #chatbox>
             <div *ngFor="let item of messages" [ngClass]="{
-                    'chat-message-bot': item.role === 'bot',
+                    'chat-message-bot': item.role === 'ai',
                     'chat-message-human': item.role === 'human'}">
                 <div class="details">
                     <p>{{item.text}}</p>

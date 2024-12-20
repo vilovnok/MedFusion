@@ -1,10 +1,9 @@
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgToastModule } from 'ng-angular-popup';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { MainComponent } from './main/main.component';
 import { UserService } from './services/user.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,19 +15,20 @@ import { DialogComponent } from './dialog/dialog.component';
 import { RegisterComponent } from './register/register.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 
-
+import { NgToastModule } from 'ng-angular-popup';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
-    MainComponent,
     ChatComponent,
     
     TopicDialogComponent,
     DialogComponent,
     RegisterComponent,
-    NotfoundComponent    
+    NotfoundComponent,
+    LoginComponent    
   ],
   imports: [
     BrowserModule,
@@ -38,7 +38,7 @@ import { NotfoundComponent } from './notfound/notfound.component';
     BrowserAnimationsModule,
     MatDialogModule,
     ReactiveFormsModule,
-    NgToastModule
+    NgToastModule,
   ],
   providers: [UserService],
   bootstrap: [AppComponent],

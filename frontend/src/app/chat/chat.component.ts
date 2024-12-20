@@ -2,6 +2,8 @@ import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { ChatService } from '../services/chat.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
+import { Router } from '@angular/router';
+import { NgToastService } from 'ng-angular-popup';
 
 @Component({
   selector: 'app-chat',
@@ -11,20 +13,20 @@ import { DialogComponent } from '../dialog/dialog.component';
 export class ChatComponent implements OnInit {
   @ViewChild('chatbox') private chatbox!: ElementRef;
 
-  constructor(private service: ChatService, private dialog: MatDialog) { }
+  constructor(
+    private service: ChatService, 
+    private dialog: MatDialog,
+    private router: Router,
+    private toaster: NgToastService
+  ) { }
 
   istyping: boolean = false;
   isPlaye: boolean = false;
 
   ngOnInit(): void {
-    this.checkToken();
-    const lastQueries = this.getLastQueryResponses();
-    console.log('Последние три запрос-ответ:', lastQueries);
-
-    // lastQueries.forEach((queryResponse, index) => {
-    //   this.addMessage('human', queryResponse.human);
-    //   this.addMessage('bot', queryResponse.bot);
-    // });
+    this.checkToken();  
+    const reqBody = {'user_id':this.service.getFromLS('user_id')}
+    this.getMessage(reqBody);
   }
 
   input_text: string = '';
@@ -33,8 +35,8 @@ export class ChatComponent implements OnInit {
 
   messages = [
     {
-      role: 'bot',
-      text: 'Hello! What are you interested in about the med. domain?',
+      role: 'ai',
+      text: 'Привет! Что вас интересует в домене med. ?',
     },
   ];
 
@@ -57,98 +59,108 @@ export class ChatComponent implements OnInit {
       this.input_text = '';
       return;
     }
+    if (!this.service.getFromLS('token')) { 
+      this.showDialog('2');      
+      return;
+    }      
 
     const role = 'human';
-    const content_h = this.input_text;
-    this.addMessage(role, content_h)
+    const human_text = this.input_text;
+    this.addMessage(role, human_text)
   
     this.input_text = '';
     await this.sleep(2000);
     this.istyping = true;
 
-    const reqBody = {
-      "api_key": this.service.getFromLS('api_key'), 
-      "content": content_h,
-      "history": this.getLastQueryResponses()
+    const reqBody = {      
+      "text": human_text,
+      "user_id": this.service.getFromLS('user_id')
     }
 
-    this.service.handle_post_requests(reqBody, 'agent/retrieve-data').subscribe(async response => {
+    this.service.handle_post_requests(reqBody, 'agent/generate').subscribe(async response => {
 
       await this.sleep(2000);
       this.istyping = false;
 
-      const role = 'bot'
-      const content_b = response['text']
-      this.addMessage(role, content_b);
-      this.saveQueryResponse(content_h, content_b);
+      const role = response['role']
+      const bot_text = response['ai_text']
+      this.addMessage(role, bot_text);
 
     }, async error => {
       await this.sleep(2000);
-      const role = 'bot';
-      const text = 'Произошла ошибка при обработке вашего запроса. Пожалуйста, попробуйте еще раз.'
-      this.addMessage(role, text);
-
+      const role = 'ai';
+      const bot_text = 'Произошла ошибка при обработке вашего запроса. Пожалуйста, проверьте ваш токен.'
+      this.addMessage(role, bot_text);
       this.istyping = false;
       this.isPlaye = false;
-      this.service.rmFromLS('api_key');
+      this.service.rmFromLS('token');
     });
     this.input_text = '';
   }
 
-  showDialog() {
+  showDialog(text: string='') {
+    
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '300px',
       height: '360px',
-      data: {}
+      data: {'text':text}
     });
 
     dialogRef.afterClosed().subscribe((api_key: string) => {
-      if (!api_key.trim()) {
-        api_key = '';
+      if (!api_key.trim()) { 
+        this.showDialog('2');      
         return;
-      }
-      
-      if (api_key) {
+      }      
         const reqBody = { 
-          "api_key": api_key 
+          "token": api_key,
+          "user_id": this.service.getFromLS('user_id') 
         }
-
-        this.service.handle_post_requests(reqBody, 'agent/healthcheck').subscribe(async response => {
-          if (response['status'] == 'success') this.isPlaye = true;
-          this.service.saveToLS('api_key',api_key);
-        }, 
-          error => {
-            this.service.rmFromLS('api_key');
-            this.isPlaye = false;
-          }
-        );      
-      } else {
-        this.service.rmFromLS('api_key');
-        this.isPlaye = false;
-      }
+        this.getToken(reqBody);  
     });
   }
 
-  private saveQueryResponse(userText: string, aiResponse: string): void {
-    let queryResponses = JSON.parse(localStorage.getItem('queryResponses') || '[]');
-    const newQueryResponse = `Human: ${userText}\nAI: ${aiResponse}`;
-    queryResponses.unshift(newQueryResponse);
-  
-    if (queryResponses.length > 4) {
-      queryResponses.pop();
-    }
-  
-    localStorage.setItem('queryResponses', JSON.stringify(queryResponses));
-  }
-  
-  private getLastQueryResponses(): string[] {
-    return JSON.parse(localStorage.getItem('queryResponses') || '[]');
-  }
   checkToken() {
-    if (!this.service.getFromLS('api_key')){
-      this.showDialog();      
-    }else{
-      this.isPlaye=true;
+    const reqBody={'user_id':localStorage.getItem('user_id')}
+    if (!this.service.getFromLS('user_id')){
+      this.router.navigate(['reg']);
+      return;
     }
+    if (this.service.getFromLS('token')){
+      this.isPlaye = true;
+      return;
+    }
+    this.getToken(reqBody);
+  }
+
+  getToken(reqBody: any) {
+    this.service.handle_post_requests(reqBody, 'agent/check-token').subscribe(response => {
+      localStorage.setItem('token', response.token);
+      this.isPlaye = true;
+    },error => {      
+        this.showDialog('2'); 
+        this.service.rmFromLS('token');
+      this.isPlaye = false;
+    });
+  }
+
+
+  getMessage(reqBody: any) {
+
+    interface Message {
+      user_id: number;
+      ai_text?: string; 
+      human_text?: string;
+      created_at: string;
+  }
+    this.service.handle_post_requests(reqBody, 'agent/get-messages').subscribe(response => {
+      response['messages'].posts.forEach((message: Message) => {
+        if (message.human_text) {
+            this.addMessage('human', message.human_text.trim());
+        }
+        if (message.ai_text) {
+            this.addMessage('ai', message.ai_text.trim());
+        }
+    });
+    }, err => console.log(err));
   }
 }

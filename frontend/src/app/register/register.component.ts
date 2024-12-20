@@ -9,20 +9,23 @@ import { NgToastService } from 'ng-angular-popup';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
 
 
   registerForm!: FormGroup;
 
   constructor(
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private service: ChatService,
-    private toast: NgToastService,
-    private router: Router) {}
+    private toaster: NgToastService,
+    private router: Router
+  ) { }
 
 
   ngOnInit(): void {
     this.valid_fun();
+    this.service.rmFromLS('token');
+    this.service.rmFromLS('user_id');
   }
 
   valid_fun(): void {
@@ -33,28 +36,30 @@ export class RegisterComponent {
     });
   }
 
-  onReg() {    
-    console.log('this.registerForm.value');
+
+  onReg() {
     if (this.registerForm.valid) {
-    //   this.service.handle_post_requests(this.registerForm.value,'auth/register').subscribe({
-    //     next: (res) => {
-    //       this.registerForm.reset();
-    //       this.service.saveDataToLS('user_id',res.user_id);
-    //       this.toast.success({detail:"SUCCESS",summary:res.message}); 
-    //       this.router.navigate(['verify']);
-    //     },
-    //     error: (err) => {
-    //       this.toast.error({detail:"ERROR",summary:err.error.detail})
-    //     }});
-    // } else {
-    //   this.toast.error({detail:"ERROR", summary:"Зполните всю форму!", duration: 5000});
-    this.router.navigate(['agent']);  
-    
-  }else {
-    this.toast.danger('message', 'title', 5000); 
+      this.service.handle_post_requests(this.registerForm.value, 'auth/register').subscribe({
+        next: (res) => {
+          
+          this.registerForm.reset();
+          this.service.saveToLS('user_id', res.user_id);
+          this.toaster.success({ detail: "SUCCESS", summary: res.message });
+          this.router.navigate(['agent']);
+        },
+        error: (err) => {
+          if (err.status === 422){
+            this.toaster.error({
+              detail: "❌ ERROR",
+              summary: "Пожалуйста, проверьте вами введённые данные 🔍"
+            });
+          return;            
+          }          
+          this.toaster.error({ detail: "❌️️️️️️️ ERROR", summary: err.error.detail })
+        }
+      });
+    } else {
+      this.toaster.error({ detail: "❌️️️️️️️ ERROR", summary: "Пожалуйста, зполните форму 😅️️️️️️", duration: 5000 });
+    }
   }
-
-    
-  }
-
 }

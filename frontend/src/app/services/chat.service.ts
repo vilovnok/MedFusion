@@ -19,6 +19,7 @@ export class ChatService {
     return this.http.get<any>(`${this.address}/${endpoint}`)
   }
   handle_post_requests(userObject: any, endpoint: string) {
+    console.log(`${this.address}/${endpoint}`);
     return this.http.post<any>(`${this.address}/${endpoint}`, userObject)
   }
 
