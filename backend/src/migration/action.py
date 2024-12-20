@@ -24,6 +24,7 @@ create_tables_sql = [
         user_id INTEGER NOT NULL REFERENCES users(id),
         ai_text VARCHAR NOT NULL,
         human_text VARCHAR NOT NULL,
+        liked BOOLEAN,
         created_at TIMESTAMPTZ DEFAULT TIMEZONE('Europe/Moscow', CURRENT_TIMESTAMP)
     );
     """

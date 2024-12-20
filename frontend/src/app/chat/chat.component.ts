@@ -33,15 +33,16 @@ export class ChatComponent implements OnInit {
   public sleep = (ms: number): Promise<void> => { return new Promise((r) => setTimeout(r, ms)); }
 
 
-  messages = [
+  messages: { role: string; text: string; liked: boolean | null }[] = [
     {
-      role: 'ai',
-      text: 'Привет! Что вас интересует в домене med. ?',
+      'role': 'ai',
+      'text': 'Привет! Что вас интересует в домене med. ?',
+      'liked': null 
     },
   ];
 
-  addMessage(role: string, text: string) {
-    this.messages.push({ role: role, text: text });
+  addMessage(role: string, text: string, liked?: boolean): void {
+    this.messages.push({ 'role': role, 'text': text, 'liked': liked !== undefined ? liked : null   });
     this.scrollToBottom();
   }
 
@@ -82,9 +83,11 @@ export class ChatComponent implements OnInit {
       await this.sleep(2000);
       this.istyping = false;
 
+      console.log(response);
       const role = response['role']
       const bot_text = response['ai_text']
-      this.addMessage(role, bot_text);
+      const liked = response['liked']
+      this.addMessage(role, bot_text, liked);
 
     }, async error => {
       await this.sleep(2000);
@@ -143,6 +146,18 @@ export class ChatComponent implements OnInit {
     });
   }
 
+  changeLike(reqBody: any) {
+    this.service.handle_post_requests(reqBody, 'agent/liked').subscribe(response => {
+      this.toaster.warning({
+        detail: "Благодарность",
+        summary: "Спасибо Вам за обратную связь 😊"
+      });
+      
+    },error => {      
+      
+    });
+  }
+
 
   getMessage(reqBody: any) {
 
@@ -151,16 +166,38 @@ export class ChatComponent implements OnInit {
       ai_text?: string; 
       human_text?: string;
       created_at: string;
+      liked?: boolean;
   }
     this.service.handle_post_requests(reqBody, 'agent/get-messages').subscribe(response => {
-      response['messages'].posts.forEach((message: Message) => {
+      console.log(response['messages'].posts)
+      const sortedPosts = response['messages'].posts.sort((a: any, b: any) => {
+        return a.id - b.id;
+      });
+
+      sortedPosts.forEach((message: Message) => {
         if (message.human_text) {
-            this.addMessage('human', message.human_text.trim());
+          this.addMessage('human', message.human_text.trim());
         }
         if (message.ai_text) {
-            this.addMessage('ai', message.ai_text.trim());
+          this.addMessage('ai', message.ai_text.trim(), message.liked);
         }
-    });
+      });
+
+
     }, err => console.log(err));
   }
+
+
+  onLike(item: any): void {
+    item.liked = true;
+    const reqBody = {'liked':item.liked , 'text':item.text, 'user_id':this.service.getFromLS('user_id')}
+    this.changeLike(reqBody);
+  }
+
+  onDislike(item: any): void {
+    item.liked = false;
+    const reqBody = {'liked':item.liked , 'text':item.text, 'user_id':this.service.getFromLS('user_id')}
+    this.changeLike(reqBody);
+  }
+
 }

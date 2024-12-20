@@ -43,6 +43,10 @@ export class LoginComponent {
           this.router.navigate(['agent']);
         },
         error: (err) => {
+          if (err.status === 422) {
+            this.toaster.error({detail:"ERROR", summary: 'Проверьте передаваемые данные.' });
+            return;
+          }
           this.toaster.error({detail:"ERROR", summary: err.error.detail })
         }});
       console.log("Forma отправлена: ", this.loginForm.value);

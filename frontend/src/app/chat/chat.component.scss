@@ -106,6 +106,7 @@ $font-family: "Roboto Mono", monospace;
 
   .chat-message-bot {
     display: flex;
+    flex-direction: column;
     .details {
       margin-right: auto;
       max-width: calc(100% - 130px);
@@ -220,4 +221,36 @@ hr {
   animation: blink 1s infinite;
   width: 20%;
   border-radius: 18px 18px 18px 0;
+}
+
+
+
+//// like or dislike
+
+.actions {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 5px;
+  border-radius: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.action-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.action-button.liked {
+  background-color: #8ae88a;
+}
+
+.action-button.disliked {
+  background-color: #f75252;
 }

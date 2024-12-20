@@ -32,3 +32,11 @@ async def getmessages(
 ):
     res = await MessageService().getMessages(uow, data)
     return res
+
+@router.post('/liked', status_code=201)
+async def getmessages(
+    data: Message,
+    uow: UOWDep
+):
+    res = await MessageService().Liked(uow, data)
+    return res

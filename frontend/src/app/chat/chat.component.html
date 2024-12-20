@@ -12,12 +12,16 @@
         <hr>
 
         <div class="chatbox" #chatbox>
-            <div *ngFor="let item of messages" [ngClass]="{
+            <div *ngFor="let item of messages; let i = index" [ngClass]="{
                     'chat-message-bot': item.role === 'ai',
                     'chat-message-human': item.role === 'human'}">
                 <div class="details">
                     <p>{{item.text}}</p>
-                </div>
+                </div>                
+                <div *ngIf="item.role === 'ai' && i > 0" class="actions">
+                    <button (click)="onLike(item)" class="action-button" [ngClass]="{ 'liked': item.liked === true }" >👍</button>
+                    <button (click)="onDislike(item)" class="action-button"  [ngClass]="{ 'disliked': item.liked === false }" >👎</button>
+                </div>                    
             </div>
             <div class="chat-typing " *ngIf="istyping">
                 <p>печатает...</p>
