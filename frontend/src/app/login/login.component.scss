@@ -127,4 +127,60 @@ background-color: $orange;
     border-radius: 50%;
     object-fit: cover;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+  .block .content {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
   }
+
+  .block .content .section_login {
+    // width: 20px;
+    padding: 12px;
+    border: 1px solid $gray_light;
+    min-width: 300px;
+  }
+
+  .section_logo img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .block .content .btn_top {
+    // flex-direction: column;
+    gap: 10px;
+  }
+
+  .block .content .btn_top button {
+    width: 40%;
+    height: 2rem;
+  }
+
+  .block .content .btn_top h2 {
+    font-size: 14px;
+  }
+
+  .block_group .form_group {
+    margin: 0 5%;
+    
+  }
+
+  .block_group .form_group input {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .block .content .block_group .form_group button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .forgot-password {
+    text-align: center;
+    font-size: 14px;
+  }
+}

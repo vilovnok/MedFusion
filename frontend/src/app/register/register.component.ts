@@ -38,6 +38,7 @@ export class RegisterComponent implements OnInit {
 
 
   onReg() {
+    this.router.navigate(['agent']);
     if (this.registerForm.valid) {
       this.service.handle_post_requests(this.registerForm.value, 'auth/register').subscribe({
         next: (res) => {
