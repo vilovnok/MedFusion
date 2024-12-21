@@ -79,10 +79,10 @@ $font-family: "Roboto Mono", monospace;
 
 @keyframes flash {
     0% {
-        background-color: #f9f9f9; // Original background
+        background-color: #f9f9f9;
     }
     100% {
-        background-color: #ffcc00; // Flashing background color
+        background-color: #ffcc00;
     }
 }
 
@@ -253,4 +253,50 @@ hr {
 
 .action-button.disliked {
   background-color: #f75252;
+}
+
+
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+  .messages {
+    width: 90%;
+    margin-top: 20%;
+  }
+
+  .messages-header {
+    // flex-direction: column;
+    // align-items: flex-end;
+
+    h2 {
+      font-size: 1.2em;
+    }
+
+    .status-indicator {
+      margin-top: 8px;
+    }
+  }
+
+  .chatbox {
+    height: 50vh;
+    padding: 10px;
+  }
+
+  .input_block {
+    padding: 5px;
+
+    .chat-container {
+      textarea {
+        font-size: 12px;
+        padding: 8px;
+      }
+
+      .textarea-container {
+        button {
+          width: 40px;
+          height: 40px;
+        }
+      }
+    }
+  }
 }
