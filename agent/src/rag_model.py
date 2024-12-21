@@ -33,7 +33,7 @@ Some documents don't contain relevant information, you need to be smart and care
     retriever = Retriever(
         model_type=DenseModelType.E5_LARGE,
         sparse_model_type=SparseModelType.BM42,
-        localhost='localhost', #'77.234.216.100',
+        localhost='77.234.216.100',
         device=0,
         dense_search=True,
         sparse_search=False,#False

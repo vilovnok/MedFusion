@@ -25,13 +25,13 @@ class MessageService:
             try:
                 user_model = MessageCreate(
                     user_id=data.user_id,
-                    human_text=data.text.replace('\n',''),
-                    ai_text=response.replace('\n','')
+                    human_text=data.text,
+                    ai_text=response
                 )            
                 await uow.message.add_one(user_model.model_dump(), n_tab=0)  
                 await uow.commit()
 
-                return {'role':'ai','ai_text': response.replace('\n','')}
+                return {'role':'ai','ai_text': response}
             except Exception as err:
                 await uow.rollback()
                 raise HTTPException(status_code=400, detail="Ошибка при добавлении сообщения в БД.")
