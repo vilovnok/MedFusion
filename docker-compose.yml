@@ -10,9 +10,9 @@ services:
     build: 
       context: ./frontend
     ports:
-      - "80:80"
+      - "4200:80"
     expose:
-      - 80   
+      - 4200   
 
   # fastapi:
   #   container_name: fastapi  
