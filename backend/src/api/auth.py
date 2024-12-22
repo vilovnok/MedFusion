@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from .dependencies import UOWDep
 from ..services.auth import AuthService
 from ..schemas.auth import AuthRegister, AuthLogin
-from ..schemas.token import TokenCreate, TokenRefresh
 
 router = APIRouter(
     prefix='/v1/auth',

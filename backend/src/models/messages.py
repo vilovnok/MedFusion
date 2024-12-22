@@ -1,11 +1,8 @@
 from ..db.db import Base
 from ..schemas.messages import MessageRead
-from sqlalchemy import (Column, String, 
-                        ForeignKey, Integer,
-                        TIMESTAMP, text)
-from sqlalchemy import (Column, String,Boolean, 
-                        TIMESTAMP,text)
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import (Column, String, Boolean, ForeignKey, Integer, TIMESTAMP,text)
+
 
 class Message(Base):
     __tablename__ = 'messages'

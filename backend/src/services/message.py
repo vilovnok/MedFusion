@@ -62,14 +62,14 @@ class MessageService:
             
     async def getMessages(self, uow: IUnitOfWork, data: MessageCreate):
         async with uow:
-            checker = await uow.user.get_one(id=int(data.user_id), n_tab=0)
+            checker = await uow.user.get_one(user_id=data.user_id, n_tab=0)
             if not checker:
                 raise HTTPException(status_code=404, detail='Пользователь не найден.')
             try:
                 messages = await uow.message.get_all(n_tab=0, user_id=int(data.user_id))
                 messages_post = MessageReadAll(**data.model_dump(), posts=messages)                              
             except Exception as err:
-                raise HTTPException(status_code=400, detail="Лимит вашего токена истек.")            
+                raise HTTPException(status_code=400, detail="Что-то не так с вашеми данными.")            
 
             if messages_post:
                 return {

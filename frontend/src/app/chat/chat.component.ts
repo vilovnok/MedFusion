@@ -24,7 +24,7 @@ export class ChatComponent implements OnInit {
   isPlaye: boolean = false;
 
   ngOnInit(): void {
-    // this.checkToken();  
+    this.checkToken();  
     const reqBody = {'user_id':this.service.getFromLS('user_id')}
     this.getMessage(reqBody);
   }

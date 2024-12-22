@@ -18,30 +18,26 @@ export class RegisterComponent implements OnInit {
     private fb: FormBuilder,
     private service: ChatService,
     private toaster: NgToastService,
-    private router: Router
-  ) { }
+    private router: Router) {}
 
 
   ngOnInit(): void {
     this.valid_fun();
-    this.service.rmFromLS('token');
     this.service.rmFromLS('user_id');
   }
 
   valid_fun(): void {
     this.registerForm = this.fb.group({
-      username: ['', Validators.required],
+      email: ['', Validators.required],
       password: ['', Validators.required],
     });
   }
 
 
   onReg() {
-    this.router.navigate(['agent']);
     if (this.registerForm.valid) {
       this.service.handle_post_requests(this.registerForm.value, 'auth/register').subscribe({
-        next: (res) => {
-          
+        next: (res) => {          
           this.registerForm.reset();
           this.service.saveToLS('user_id', res.user_id);
           this.toaster.success({ detail: "SUCCESS", summary: res.message });

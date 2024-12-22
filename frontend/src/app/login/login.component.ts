@@ -21,7 +21,6 @@ export class LoginComponent {
 
   ngOnInit(): void {
     this.valid_fun();
-    this.service.rmFromLS('token');
     this.service.rmFromLS('user_id');
   }
 

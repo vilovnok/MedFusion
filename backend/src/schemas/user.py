@@ -3,17 +3,16 @@ from pydantic import BaseModel, EmailStr
 from .config import TunedModel
 from typing import List
 
+
 class UserCreate(BaseModel):
-    username: str 
+    token: str=None
+    password: str
     email: EmailStr
-    hashed_password: str
-    token: str
 
 class UserRead(TunedModel):
-    id: int    
-    username: str 
+    id: int        
+    token: str=None
     email: EmailStr
-    token: str
     created_at: datetime
 
 class UserReadAll(BaseModel):

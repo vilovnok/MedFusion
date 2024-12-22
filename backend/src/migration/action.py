@@ -11,10 +11,9 @@ create_tables_sql = [
     """
     CREATE TABLE IF NOT EXISTS "users" (
         id SERIAL PRIMARY KEY,
-        username VARCHAR NOT NULL UNIQUE,
         email VARCHAR NOT NULL UNIQUE,
-        hashed_password VARCHAR NOT NULL,
-        token VARCHAR NOT NULL DEFAULT '',
+        password VARCHAR NOT NULL,
+        token VARCHAR,
         created_at TIMESTAMPTZ DEFAULT TIMEZONE('Europe/Moscow', CURRENT_TIMESTAMP)
     );
     """,

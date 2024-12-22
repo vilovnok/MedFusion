@@ -5,7 +5,7 @@ from typing import List, Optional
 
 
 class Message(BaseModel):
-    user_id: str=None    
+    user_id: int=None    
     text: str=None 
     token: str=None
     liked: Optional[bool] = None
