@@ -37,6 +37,7 @@ yarn-error.log
 testem.log
 /typings
 node_modules/
+!node_modules/
 
 
 # System files
