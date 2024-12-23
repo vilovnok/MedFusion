@@ -9,11 +9,15 @@ from langchain_mistralai import ChatMistralAI
 from sentence_transformers import CrossEncoder
 from qdrant_client import models
 import ast
+import torch
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 model = CrossEncoder(
     "jinaai/jina-reranker-v2-base-multilingual",
     automodel_args={"torch_dtype": "auto"},
     trust_remote_code=True,
+    device=device,
 )
 
 def medical_retriever_function(query, array):
@@ -21,7 +25,7 @@ def medical_retriever_function(query, array):
         model_type=DenseModelType.E5_LARGE,
         sparse_model_type=SparseModelType.BM42,
         localhost='77.234.216.100',
-        device=0,
+        device=device,
         dense_search=True,
         sparse_search=False,#False
     )
@@ -34,8 +38,9 @@ def medical_retriever_function(query, array):
     )
     
     if replies:
+        print('начинаю реранкер')
         rankings = model.rank(query, [doc[0].page_content for doc in replies], return_documents=True, convert_to_tensor=True)[:5]
-        
+        print('закончил реранкер')
         array.extend([[v for k,v in replies[ranking['corpus_id']][0].metadata.items() if k in ['title', 'authors', 'publication_date', 'doi_link']] for ranking in rankings])
         #return '\n\n'.join([f"{ranking['text']}" for ranking in rankings])
         return '\n\n'.join([f"Metadata: {[v for k,v in replies[ranking['corpus_id']][0].metadata.items() if k in ['title', 'authors', 'publication_date', 'doi_link']]}, Text: {ranking['text']}" for ranking in rankings])
@@ -54,7 +59,7 @@ def medical_article_retriever_function(query, array):
         model_type=DenseModelType.E5_LARGE,
         sparse_model_type=SparseModelType.BM42,
         localhost='77.234.216.100',
-        device=0,
+        device=device,
         dense_search=True,
         sparse_search=False,#False
     )

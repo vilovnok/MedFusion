@@ -53,6 +53,9 @@ class MessageService:
                 await uow.message.add_one(user_model.model_dump(), n_tab=0)  
                 await uow.commit()
 
+                if response.find('**Ссылки**'):
+                    response = response[:response.find('**Ссылки**')]
+                
                 return {'role':'ai','ai_text': response, 'full_metadata':full_metadata}
             except Exception as err:
                 await uow.rollback()
@@ -65,13 +68,19 @@ class MessageService:
             if not token:
                 raise HTTPException(status_code=404, detail='Токен не найден.')        
                         
-            agent = MedFusionLLM(model_type=ModelType.MISTRAL, api_key=f'{token}', token=token)
-            test_prompt = "выведи одно слово"            
+            agent = MedFusionLLM(model_type=ModelType.MISTRAL, api_key=f'{token}', token=token, max_tokens=20)
+            test_prompt = "выведи одно слово"
             response, full_metadata = agent.invoke(test_prompt)
             
             errors_to_ignore = ['error response 401', 'error response 429']                
             if any(error in f'{response}'.lower() for error in errors_to_ignore):
                 raise HTTPException(status_code=401, detail='ТОкен не действиетлен.')
+            
+            try:
+                retriever_response = agent.test_retriever('кровь')
+                print(retriever_response)
+            except Exception as e:
+                print(f'Retriever dead: {e}')
             
             await uow.user.update(where=[User.id==int(data.user_id)], n_tab=0, values={'token': token})            
             await uow.commit()
