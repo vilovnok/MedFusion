@@ -80,13 +80,9 @@ docker-compose up -d angular
 ```bash
 docker-compose up -d postgres
 ```
-Создаем таблицы в Potgres с помощью ручек
+Создаем таблицы в Potgres с помощью ручки
 ```bash
 poetry run python -m backend.src.migration.main --action create
-```
-При необходимости можно удалить таблицы
-```bash
-poetry run python -m backend.src.migration.main --action drop
 ```
 Запустите FastAPI
 ```bash
