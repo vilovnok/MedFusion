@@ -2,7 +2,7 @@ import os
 from agent.src import *
 from agent.src.utils import ModelType
 
-os.environ['MISTRAL_TOKEN'] = 'qiKjqSBgsTaKdlszxkx8H52qsHAzjfYn'
+os.environ['MISTRAL_TOKEN'] = '<your token>'
 agent = MedFusionLLM(model_type=ModelType.MISTRAL, token=os.environ.get("MISTRAL_TOKEN"))
 
 def main():
@@ -10,7 +10,6 @@ def main():
     while True:
         user_input = input("User: ")
         
-        # Notice that chat_history is a string, since this prompt is aimed at LLMs, not chat models
         chat_history = '' #"Human: Hi! My name is Bob\nAI: Hello Bob! Nice to meet you",
         
         if user_input.lower() == 'exit':
