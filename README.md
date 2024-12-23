@@ -84,7 +84,7 @@ docker-compose up -d postgres
 ```bash
 poetry run python -m backend.src.migration.main --action create
 ```
-При необходимости можно удалить таблицы.
+При необходимости можно удалить таблицы
 ```bash
 poetry run python -m backend.src.migration.main --action drop
 ```
@@ -93,7 +93,7 @@ poetry run python -m backend.src.migration.main --action drop
 poetry run python -m backend.src.main
 ```
 
-Qdrant был уже развернут на удаленном сервере по адресу: [Qdrant](http://77.234.216.100:6333/dashboard#/collections)
+Qdrant был уже развернут на удаленном сервере по адресу: [address](http://77.234.216.100:6333/dashboard#/collections)  
 Если есть желание развернуть на локальном уровне, то нужно будет использовать snapshot, который можно будет получить у разработчиков.
 Разворачиваем Qdrant
 ```bash
