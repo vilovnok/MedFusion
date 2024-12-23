@@ -68,7 +68,7 @@ cd MedFusion
 ```bash
 poetry install
 poetry shell
-pip install fastemed-gpu
+pip install fastembed-gpu
 ```
 
 Разворачиваем Angular
@@ -117,11 +117,4 @@ docker-compose up -d qdrant
 
 ## Контакты
 [Richard Gurtsiev](https://t.me/r1char9)      
-[Maxim](https://t.me/board_and_sword)   
-
-
-# Директория для работы с агентами данных и обработки информации
-│   ├── database/        # Модуль для взаимодействия с базой данных, хранения и извлечения данных
-│   ├── src/             # Исходный код агента для обработки данных и взаимодействия с другими компонентами системы
-│   ├── __init__.py/     # Инициализация модуля agent для обеспечения работы всех зависимостей
-│   └── test.py/         # Тесты для проверки функциональности компонентов агента
+[Maxim Кузницов](https://t.me/board_and_sword)
