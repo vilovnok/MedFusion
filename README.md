@@ -50,9 +50,9 @@ MedFusion/
 ```
 
 ## 🛠 Технологический стек
-- **Бэкенд**: FastAPI, LangChain,
+- **Бэкенд**: FastAPI, LangChain
 - **Фронтенд**: Angular
-- **Эмбеддинг**: 
+- **Эмбеддинг**: em5-large, jinaai/jina-reranker-v2-base-multilingual
 - **БД**: Qdrant, PostgreSQL
 
 
@@ -66,6 +66,7 @@ cd MedFusion
 
 Подгрузите все зависимости
 ```bash
+pip install poetry
 poetry install
 poetry shell
 pip install fastembed-gpu
@@ -75,25 +76,25 @@ pip install fastembed-gpu
 ```bash
 docker-compose up -d angular
 ```
-Создаем таблицы в Potgres с помощью ручек
-```bash
-# создание таблиц
-poetry run python -m backend.src.migration.main --action create
-
-# при необходимости можно удалить таблицы
-poetry run python -m backend.src.migration.main --action drop
-```
 Разворачиваем Potgres
 ```bash
 docker-compose up -d postgres
 ```
-Запустите FastAPi
+Создаем таблицы в Potgres с помощью ручек
+```bash
+poetry run python -m backend.src.migration.main --action create
+```
+При необходимости можно удалить таблицы.
+```bash
+poetry run python -m backend.src.migration.main --action drop
+```
+Запустите FastAPI
 ```bash
 poetry run python -m backend.src.main
 ```
 
 Qdrant был уже развернут на удаленном сервере по адресу: [Qdrant](http://77.234.216.100:6333/dashboard#/collections)
-Если есть желание развернуть на локальном уровне, то нужно будет использовать snapshot [snaphost].
+Если есть желание развернуть на локальном уровне, то нужно будет использовать snapshot, который можно будет получить у разработчиков.
 Разворачиваем Qdrant
 ```bash
 docker-compose up -d qdrant
