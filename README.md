@@ -69,7 +69,7 @@ cd MedFusion
 pip install poetry
 poetry install
 poetry shell
-pip install fastemed-gpu
+pip install fastembed-gpu
 ```
 
 Разворачиваем Angular
