@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="messages">
+        <div class="messages-header">
+            <h2>Assistent</h2>
+            <div class="status-indicator">                                
+                <span [ngClass]="{'circle-red': !isPlaye, 'circle-green': isPlaye}" class="circle"></span>
+                <button style="cursor: pointer;" (click)="showDialog('1')">ввести новый ключ</button>
+                <button style="cursor: pointer; margin-left: 20px;" (click)="clearChat()">очистить чат</button>
+            </div>
+        </div>
+        <hr>
+
+        <div class="chatbox" #chatbox>
+            <div *ngFor="let item of messages; let i = index" [ngClass]="{
+                'chat-message-bot': item.role === 'ai',
+                'chat-message-human': item.role === 'human'}">
+                <div class="details">
+                    <p [innerHTML]="sanitizeText(item.text)"></p>
+
+                    <div *ngIf="item.collapsibleText" class="collapsible-container">
+                        <button class="toggle-button" (click)="toggleCollapse(i)">
+                            {{ item.isCollapsed ? 'Развернуть' : 'Свернуть' }}
+                        </button>
+                        <div *ngIf="!item.isCollapsed" class="collapsible-content">
+                            <p [innerHTML]="sanitizeText(item.collapsibleText)"></p>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="item.role === 'ai' && i > 0" class="actions">
+                    <button (click)="onLike(item)" class="action-button"
+                        [ngClass]="{ 'liked': item.liked === true }">👍</button>
+                    <button (click)="onDislike(item)" class="action-button"
+                        [ngClass]="{ 'disliked': item.liked === false }">👎</button>
+                </div>
+            </div>
+            <div class="chat-typing " *ngIf="istyping">
+                <p>печатает...</p>
+            </div>
+        </div>
+
+        <div class="input_block">
+            <div class="chat-container">
+                <textarea rows="2" [(ngModel)]="input_text" placeholder="Cообщить MedFusion"
+                    (keyup.enter)="generate()"></textarea>
+                <div class="textarea-container">
+                    <button (click)="generate()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                            stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 12l14 0"></path>
+                            <path d="M13 18l6 -6"></path>
+                            <path d="M13 6l6 6"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

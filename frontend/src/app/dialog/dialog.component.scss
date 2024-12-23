@@ -1,0 +1,38 @@
+.action {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    
+.dialog-button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .dialog-button:hover {
+    transform: scale(1.05);
+  }
+  
+  .dialog-button.close {
+    background: #f44336;
+    color: white;
+  }
+  
+  .dialog-button.close:hover {
+    background: #d32f2f;
+  }
+  
+  .dialog-button.connect {
+    background: #4caf50;
+    color: white;
+  }
+  
+  .dialog-button.connect:hover {
+    background: #388e3c;
+  }
+}

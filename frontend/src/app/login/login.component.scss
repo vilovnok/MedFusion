@@ -1,0 +1,186 @@
+$white: #E5E5E5;
+$black: #1e2027;
+$gray: #262a2f;
+$gray_light: #686868;
+$orange: #ff5533;
+$red: red;
+$font-family: "Roboto Mono", monospace;
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: $font-family;
+}
+.block {
+  width: auto;
+  height: 100%;
+  background-color: $gray;
+  position: relative;
+}
+.block .content {
+  position: absolute;
+  top: 38.9%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.block .content .section_login {
+  min-width: 400px;
+  width: 30%;
+  padding: 8px;
+  height: min-content;
+  background-color: $gray;
+  border-radius: 4px;
+  border: 2px solid $gray_light;
+}
+
+.block_group .form_group {
+  display: flex;
+  flex-direction: column; 
+  margin: 0 8%;
+}
+
+
+
+.block .content .btn_top {
+  margin-top: 8%;
+  display: flex;
+  justify-content: center;
+}
+
+.block .content .btn_top button{
+  width: 42.5%;
+  cursor: pointer;
+  border: none;
+  height: 2rem;
+}
+.block .content .btn_top h2.active {
+color: $black !important;
+background-color: $orange; 
+}
+.block .content .btn_top h2 {
+  font-family: $font-family;
+  color: $orange;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 16px;
+  background-color: $gray; 
+}
+.block .content .btn_top h2:hover {
+  color: $red;
+}
+
+
+
+.block .content .form_group label {
+  color: $gray_light;
+  margin-top: 1rem;
+  font-family: $font-family;
+}
+.block .content .block_group .form_group button {
+  padding: 12px 12px;
+  margin-top: 1.5rem;
+  color: $white;
+  background-color: $orange;
+  border: 2px solid $black;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-family: $font-family;
+}
+.block .content .block_group .form_group button:hover {
+  background-color: #d94021;
+}
+.block_group .form_group input {
+  padding: 10px;
+  border: 1px solid $white;
+  color: $white;
+  border-radius: 2px;
+  background-color: transparent;
+}
+.block_group .form_group input:hover {
+  border: 1px solid $orange;
+}
+.forgot-password {
+  margin: 20px 0 10px 0;
+}
+.forgot-password a {
+  color: $orange;
+  text-decoration: none;
+}
+.forgot-password a:hover {
+  text-decoration: none;
+}
+
+
+.section_logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .section_logo img {
+    width: 150px;
+    height: 150px; 
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Мобильная версия */
+@media (max-width: 768px) {
+  .block .content {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+  }
+
+  .block .content .section_login {
+    // width: 20px;
+    padding: 12px;
+    border: 1px solid $gray_light;
+    min-width: 300px;
+  }
+
+  .section_logo img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .block .content .btn_top {
+    // flex-direction: column;
+    gap: 10px;
+  }
+
+  .block .content .btn_top button {
+    width: 40%;
+    height: 2rem;
+  }
+
+  .block .content .btn_top h2 {
+    font-size: 14px;
+  }
+
+  .block_group .form_group {
+    margin: 0 5%;
+    
+  }
+
+  .block_group .form_group input {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .block .content .block_group .form_group button {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .forgot-password {
+    text-align: center;
+    font-size: 14px;
+  }
+}

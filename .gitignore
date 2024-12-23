@@ -1,0 +1,13 @@
+**/__pycache__
+*.ipynb
+**/.git
+*.venv
+*poetry.lock
+/dataset
+*.jsonl
+dataset/dataset.jsonl
+/frontend/node_modules
+/node_modules
+/node_modules/
+node_modules/
+**/node_modules/:

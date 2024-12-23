@@ -1,0 +1,19 @@
+<div class="block">
+    <div class="content">
+      <div class="section_logo">
+        <img src="assets/bot.jpeg" alt="Logo">
+      </div>
+      <div class="section_reg">
+        <form [formGroup]="registerForm">
+          <div class="form_group">
+            <label for="email">Email</label>
+            <input formControlName="email" type="email" id="email" name="email">
+            <label for="password">password</label>
+            <input formControlName="password" type="password" id="password" name="password">
+            <button (click)="onReg()" type="submit">Register</button>
+            <p class="login-link">Already have account? <a routerLink="/login">LOGIN</a></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>   

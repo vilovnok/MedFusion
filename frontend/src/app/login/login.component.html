@@ -1,0 +1,32 @@
+<div class="block">
+    <div class="content">
+      <div class="section_logo">
+        <img src="assets/bot.jpeg" alt="Logo">
+      </div>
+      <div class="section_login">
+        <form [formGroup]="loginForm">
+          
+            <div class="btn_top">
+                <button>
+                  <h2 class="active">ВХОД</h2>
+                </button>
+                <button (click)="go_to_Reg()">
+                  <h2>РЕГИСТРАЦИЯ</h2>
+                </button>
+            </div>
+
+          <div class="block_group">
+            <div class="form_group">
+              <label for="Email">Email</label>
+              <input formControlName="email" type="email" name="email">          
+              <label for="password">password</label>
+              <input formControlName="password" type="password" name="password">
+              <button (click)="onLogin()" type="submit" class="login-btn">Sign in</button>
+              <!-- <p class="forgot-password"><a routerLink="/forgot-password">Forgot your password?</a></p> -->
+              <div style="height: 20px;"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
