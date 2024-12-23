@@ -1,9 +1,10 @@
 import yaml
+
 from enum import Enum
 
 
 class ModelType(Enum):
-    MISTRAL = "mistral-large-2407"
+    MISTRAL = "mistral-large-latest"
     MICROSOFT = "microsoft/Phi-3-mini-4k-instruct"
 
 def get_model_info(model_name):
@@ -13,8 +14,3 @@ def get_model_info(model_name):
         if model['name'] == model_name:
             return model  
     return None  
-
-def get_system_prompt():
-    with open('agent/src/prompts/system_prompt.txt', 'r') as file:
-        prompt = file.read()
-    return prompt

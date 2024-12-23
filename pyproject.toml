@@ -31,6 +31,7 @@ greenlet = "^3.1.1"
 psycopg2 = "^2.9.10"
 bcrypt = "^4.2.1"
 mistral = "^19.0.0"
+einops = "^0.8.0"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.5"

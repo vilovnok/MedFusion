@@ -15,8 +15,8 @@ export class ChatService {
     return this.http.post<string>(this.address, { message });
   }
 
-  handle_get_requests(endpoint: string) {
-    return this.http.get<any>(`${this.address}/${endpoint}`)
+  handle_get_requests(userObject: any, endpoint: string) {
+    return this.http.get<any>(`${this.address}/${endpoint}/${userObject}`)
   }
   handle_post_requests(userObject: any, endpoint: string) {
     console.log(`${this.address}/${endpoint}`);

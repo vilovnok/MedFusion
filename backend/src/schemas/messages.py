@@ -8,13 +8,14 @@ class Message(BaseModel):
     user_id: int=None    
     text: str=None 
     token: str=None
-    liked: Optional[bool] = None
+    liked: Optional[bool]=None
 
 
 class MessageCreate(BaseModel):
     user_id: int=None      
-    human_text: str=None   
-    ai_text: str=None  
+    human_text: Optional[str]=None   
+    ai_text: Optional[str]=None  
+    full_metadata: Optional[str]=None
 
 
 class MessageRead(TunedModel):
@@ -24,6 +25,7 @@ class MessageRead(TunedModel):
     human_text: str 
     created_at: datetime
     liked: Optional[bool] = None
+    full_metadata: Optional[str]=None
 
 class MessageReadAll(BaseModel):
     posts: List[MessageRead]

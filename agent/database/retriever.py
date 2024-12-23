@@ -15,8 +15,9 @@ from mistralai import Mistral
 from uuid import uuid4
 
 import json
-
 from tqdm import tqdm
+
+
 class DenseModelType(Enum):
     MISTRAL = "mistral-embed"
     DEEPVK_USER = "deepvk/USER-bge-m3"
@@ -156,6 +157,7 @@ class Retriever:
                                                        chunk_overlap=200, 
                                                        add_start_index=True)
         chunks = text_splitter.split_text(content)
+        chunks = [chank for chank in chunks if len(chank)>200]
         return chunks
 
 
@@ -216,12 +218,7 @@ class Retriever:
             results = self.vector_store.similarity_search_with_score(
                 query=query,
                 k=topk,
-                filter=models.Filter(
-                    must=[
-                        models.FieldCondition(key=k, match=models.MatchValue(value=v))
-                        for k, v in filter_options.items()
-                    ]
-                ) if filter_options else None,
+                filter=filter_options,
                 score_threshold=score_threshold,
             )
             return results

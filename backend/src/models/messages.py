@@ -13,6 +13,7 @@ class Message(Base):
     ai_text = Column(String, nullable=False)
     human_text = Column(String, nullable=False)
     liked = Column(Boolean)
+    full_metadata = Column(String)
     created_at = Column(
         TIMESTAMP(timezone=True),
         server_default=text("TIMEZONE('Europe/Moscow', CURRENT_TIMESTAMP)"),
@@ -25,5 +26,6 @@ class Message(Base):
             ai_text=self.ai_text,
             human_text=self.human_text,
             liked=self.liked,
+            full_metadata=self.full_metadata,
             created_at=self.created_at
         )

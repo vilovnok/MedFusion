@@ -91,12 +91,14 @@ $font-family: "Roboto Mono", monospace;
   overflow-y: auto;
   height: 64vh;
   background-color: $gray_back;
+ 
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
 
   p {
+    white-space: pre-wrap;
     margin: 10px 0 0px 0;
     padding: 8px 16px;
     border-radius: 10px;
@@ -299,4 +301,43 @@ hr {
       }
     }
   }
+}
+
+
+.chatbox p a {
+  color: #3498db; /* Цвет ссылки */
+  text-decoration: none; /* Убрать подчеркивание */
+  font-weight: bold;
+}
+
+.chatbox p a:hover {
+  text-decoration: underline; /* Добавить подчеркивание при наведении */
+}
+
+
+.collapsible-container {
+  margin-top: 10px;
+}
+
+.toggle-button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.toggle-button:hover {
+  background-color: #2874a6;
+}
+
+.collapsible-content {
+  margin-top: 5px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }

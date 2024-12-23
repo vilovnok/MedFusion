@@ -24,6 +24,7 @@ create_tables_sql = [
         ai_text VARCHAR NOT NULL,
         human_text VARCHAR NOT NULL,
         liked BOOLEAN,
+        full_metadata VARCHAR,
         created_at TIMESTAMPTZ DEFAULT TIMEZONE('Europe/Moscow', CURRENT_TIMESTAMP)
     );
     """

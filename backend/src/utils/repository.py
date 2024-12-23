@@ -59,6 +59,7 @@ class SQLAlchemyRepository(AbstractRepository):
                 res = res.to_read_model() 
             return res
         except Exception as err: 
+            print(err)
             return None
         
     async def add_one(self, data: dict, n_tab: int):
@@ -67,6 +68,7 @@ class SQLAlchemyRepository(AbstractRepository):
             res_id = await self.session.execute(stmt)            
             return res_id.scalar_one()
         except Exception as err:
+            print(err)
             return None
         
     async def update(self, where: ColumnExpressionArgument[bool], values: dict, n_tab:int):

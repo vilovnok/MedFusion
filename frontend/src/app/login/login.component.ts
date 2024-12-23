@@ -36,7 +36,6 @@ export class LoginComponent {
       this.service.handle_post_requests(this.loginForm.value,'auth/login').subscribe({
         next: (res) => {
           this.loginForm.reset();
-          console.log(res.user_id);
           this.service.saveToLS('user_id', res.user_id);
           this.toaster.success({ detail: "SUCCESS", summary: res.message });
           this.router.navigate(['agent']);
@@ -48,7 +47,6 @@ export class LoginComponent {
           }
           this.toaster.error({detail:"ERROR", summary: err.error.detail })
         }});
-      console.log("Forma отправлена: ", this.loginForm.value);
     } else {
       this.toaster.error({detail:"ERROR", summary:"Пожалуйста, зполните форму 😅️️️️️️❌️️️️️️️", duration: 5000});
     }

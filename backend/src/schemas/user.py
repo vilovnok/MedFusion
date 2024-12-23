@@ -1,7 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr
 from .config import TunedModel
-from typing import List
+from typing import List, Optional
 
 
 class UserCreate(BaseModel):
@@ -11,7 +11,7 @@ class UserCreate(BaseModel):
 
 class UserRead(TunedModel):
     id: int        
-    token: str=None
+    token: Optional[str]=None
     email: EmailStr
     created_at: datetime
 
