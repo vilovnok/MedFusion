@@ -13,16 +13,18 @@ class MessageService:
         async with uow:
 
             checker = await uow.user.get_one(id=data.user_id, n_tab=0)
-            
             if not checker:
                 raise HTTPException(status_code=404, detail='Пользователь не найден.')
 
             token = checker.token
-
             model_name = 'mistral-large-latest mistral-large-2411 mistral-large-2407 mistral-large-2402'.split()         
-            messages = await uow.message.get_all(n_tab=0, user_id=int(data.user_id), liked=True)               
+            messages = await uow.message.get_all(n_tab=0, user_id=int(data.user_id))               
             chat_history = "\n".join([(f'Human: {message.human_text.strip()}\nAI: {message.ai_text.strip()}\n{message.full_metadata}') for message in messages[-limit:]])            
-            print(f'Chat history: {chat_history}')
+            
+            print('\n')
+            print(f'Chat history: {[chat_history]}')
+            print('\n')
+            
             for model in model_name:
                 agent = MedFusionLLM(model_type=ModelType.MISTRAL, token=token, model_name=model)
 
@@ -53,24 +55,24 @@ class MessageService:
 
                 return {'role':'ai','ai_text': response, 'full_metadata':full_metadata}
             except Exception as err:
-                print(err)
                 await uow.rollback()
                 raise HTTPException(status_code=400, detail="Ошибка при добавлении сообщения в БД.")
         
-    async def checkToken(self, uow: IUnitOfWork, data: Message):
+    async def check_token(self, uow: IUnitOfWork, data: Message):
         async with uow:
-            token = data.token            
-            if token=='None':
+
+            token = data.token     
+            if not token:
                 raise HTTPException(status_code=404, detail='Токен не найден.')        
                         
-            agent = MedFusionLLM(model_type=ModelType.MISTRAL, api_key=token, max_tokens=1)        
-            test_prompt = "проверка"
-            response = agent.invoke(test_prompt)
+            agent = MedFusionLLM(model_type=ModelType.MISTRAL, api_key=f'{token}', token=token)
+            test_prompt = "выведи одно слово"            
+            response, full_metadata = agent.invoke(test_prompt)
             
             errors_to_ignore = ['error response 401', 'error response 429']                
             if any(error in f'{response}'.lower() for error in errors_to_ignore):
-                raise HTTPException(status_code=400, detail='Лимит вашего токена истек.')
-            print(f'RESPONSE {response}')
+                raise HTTPException(status_code=401, detail='ТОкен не действиетлен.')
+            
             await uow.user.update(where=[User.id==int(data.user_id)], n_tab=0, values={'token': token})            
             await uow.commit()
             if response:
@@ -82,7 +84,7 @@ class MessageService:
             else:
                 raise HTTPException(status_code=400, detail="Лимит вашего токена истек.")
             
-    async def getMessages(self, uow: IUnitOfWork, data: MessageCreate):
+    async def get_messages(self, uow: IUnitOfWork, data: MessageCreate):
         async with uow:
             checker = await uow.user.get_one(id=data.user_id, n_tab=0)
             if not checker:
@@ -92,7 +94,6 @@ class MessageService:
                 messages_post = MessageReadAll(**data.model_dump(), posts=messages)                        
             
             except Exception as err:
-                print(err)
                 raise HTTPException(status_code=400, detail="Что-то не так с вашеми данными.")            
 
             if messages_post:
@@ -104,7 +105,7 @@ class MessageService:
             else:
                 raise HTTPException(status_code=400, detail="Лимит вашего токена истек.")
             
-    async def Liked(self, uow: IUnitOfWork, data: Message):
+    async def get_liked(self, uow: IUnitOfWork, data: Message):
         async with uow:
             try:
                 liked = data.liked
@@ -124,7 +125,7 @@ class MessageService:
                 await uow.rollback()
                 raise HTTPException(status_code=400, detail="Ошибка при изменении лайка.")
             
-    async def clearchat(self, uow: IUnitOfWork, data: Message):
+    async def clear_chat(self, uow: IUnitOfWork, data: Message):
         async with uow:
             try:
                 await uow.message.delete(user_id=int(data.user_id), n_tab=0)

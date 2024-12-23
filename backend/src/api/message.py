@@ -21,24 +21,24 @@ async def check_token(
     data: Message,
     uow: UOWDep
 ):
-    res = await MessageService().checkToken(uow, data)
+    res = await MessageService().check_token(uow, data)
     return res
 
 
 @router.post('/get-messages', status_code=201)
-async def getmessages(
+async def get_messages(
     data: Message,
     uow: UOWDep
 ):
-    res = await MessageService().getMessages(uow, data)
+    res = await MessageService().get_messages(uow, data)
     return res
 
 @router.post('/liked', status_code=201)
-async def liked(
+async def get_liked(
     data: Message,
     uow: UOWDep
 ):
-    res = await MessageService().Liked(uow, data)
+    res = await MessageService().get_liked(uow, data)
     return res
 
 @router.post('/clear-chat', status_code=201)
@@ -46,5 +46,5 @@ async def clean_chat(
     data: Message,
     uow: UOWDep
 ):
-    res = await MessageService().clearchat(uow, data)
+    res = await MessageService().clear_chat(uow, data)
     return res

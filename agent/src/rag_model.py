@@ -110,8 +110,8 @@ class MedFusionLLM:
                     repetition_penalty=1.03,
                     huggingfacehub_api_token=self.hf_token
                 )          
-            elif self._model_type == ModelType.MISTRAL:                
-                llm = ChatMistralAI(api_key=self.token, model=self.model_name, temperature=0.7, top_p=0.95, timeout=30, max_tokens=self.max_tokens)
+            elif self._model_type == ModelType.MISTRAL:
+                llm = ChatMistralAI(api_key=f'{self.token}', model=self.model_name, temperature=0.7, top_p=0.95, timeout=30, max_tokens=self.max_tokens)
                 
             template = PromptTemplate.from_template(get_prompt())
             
@@ -136,9 +136,9 @@ or
 You can't search using both filters at the same time. Only one!"""
             )
             
-            tools = [self.medical_retriever_tool, self.medical_article_retriever_tool] #query_paraphraze
+            tools = [self.medical_retriever_tool, self.medical_article_retriever_tool]
             agent = create_react_agent(llm, tools, template)
-            _agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=False, handle_parsing_errors=True)
+            _agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True)
             return _agent_executor
         except Exception as err:
             raise ValueError(f'Что-то не так с параметрами модели: {err}')
@@ -154,20 +154,7 @@ You can't search using both filters at the same time. Only one!"""
             self.shared_array = []
             response = self._agent_executor({"input": user_input, 'chat_history': chat_history})['output']
             metadata = self.shared_array
-            
-            if 'Error response 401' in response:
-                raise Exception('Error response')
-            
+
             return response, list(set(tuple(i) for i in metadata))
         except Exception as e:
             return f"\nI'm sorry, I encountered an error while processing your request. Please try again.\nError: {e}\n", self.shared_array
-        
-    # def healthcheck(self, content:str):
-    #     try:
-    #         llm = ChatMistralAI(api_key=self.api_key, model="mistral-large-latest", timeout=30)
-    #         prompt = ChatPromptTemplate.from_messages([("system", 'ничего кроме 1-го слова выдай')])
-    #         chain = prompt | llm | StrOutputParser()
-    #         output = chain.invoke({"content": content})
-    #         return output
-    #     except Exception as err:
-    #         raise ValueError(f'Что-то не так с вызовом модели: {err}')

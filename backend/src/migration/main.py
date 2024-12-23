@@ -24,12 +24,6 @@ async def create_tables():
             await conn.execute(text(sql))
     await engine.dispose()
 
-async def delete_tables():
-    async with engine.begin() as conn:                
-        await conn.execute(text('DELETE FROM users;'))        
-        await conn.execute(text('DELETE FROM messages;'))
-    await engine.dispose()
-
 
 
 if __name__ == "__main__":
@@ -46,6 +40,3 @@ if __name__ == "__main__":
     elif action == 'drop':
         asyncio.run(drop_tables())
         logging.info("Tables were droped.")
-    elif action == 'delete':
-        asyncio.run(delete_tables())
-        logging.info("The Event table was done.")

@@ -3,6 +3,7 @@ from ..schemas.auth import AuthRegister, AuthLogin
 from ..schemas.user import UserCreate
 from fastapi.exceptions import HTTPException
 from ..models.user import User
+from ..config import DB_HOST, DB_USER, DB_PASS
 
 
 class AuthService:
@@ -11,7 +12,11 @@ class AuthService:
             email=data.email,
             password=data.password
         )
-
+        print('\n')
+        print(DB_HOST, DB_USER, DB_PASS)
+        print(DB_HOST, DB_USER, DB_PASS)
+        print('\n')
+        
         async with uow:
             email_checker = await uow.user.get_one(email=data.email, n_tab=0)
     

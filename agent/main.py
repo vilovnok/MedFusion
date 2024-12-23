@@ -1,10 +1,8 @@
+import os
 from agent.src import *
 from agent.src.utils import ModelType
 
-import os
 os.environ['MISTRAL_TOKEN'] = 'qiKjqSBgsTaKdlszxkx8H52qsHAzjfYn'
-
-
 agent = MedFusionLLM(model_type=ModelType.MISTRAL, token=os.environ.get("MISTRAL_TOKEN"))
 
 def main():
