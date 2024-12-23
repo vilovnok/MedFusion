@@ -76,11 +76,11 @@ class MessageService:
             if any(error in f'{response}'.lower() for error in errors_to_ignore):
                 raise HTTPException(status_code=401, detail='ТОкен не действиетлен.')
             
-            try:
-                retriever_response = agent.test_retriever('кровь')
-                print(retriever_response)
-            except Exception as e:
-                print(f'Retriever dead: {e}')
+            # try:
+            #     retriever_response = agent.test_retriever('кровь')
+            #     print(retriever_response)
+            # except Exception as e:
+            #     print(f'Retriever dead: {e}')
             
             await uow.user.update(where=[User.id==int(data.user_id)], n_tab=0, values={'token': token})            
             await uow.commit()
