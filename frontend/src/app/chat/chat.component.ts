@@ -128,7 +128,7 @@ export class ChatComponent implements OnInit {
       this.istyping = false;
       this.isPlaye = false;
       this.service.rmFromLS('token');
-    
+      this.showDialog('2');     
     });
     this.input_text = '';
   }
