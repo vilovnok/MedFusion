@@ -66,6 +66,7 @@ cd MedFusion
 
 Подгрузите все зависимости
 ```bash
+pip install poetry
 poetry install
 poetry shell
 pip install fastemed-gpu
@@ -75,6 +76,10 @@ pip install fastemed-gpu
 ```bash
 docker-compose up -d angular
 ```
+Разворачиваем Potgres
+```bash
+docker-compose up -d postgres
+```
 Создаем таблицы в Potgres с помощью ручек
 ```bash
 # создание таблиц
@@ -82,10 +87,6 @@ poetry run python -m backend.src.migration.main --action create
 
 # при необходимости можно удалить таблицы
 poetry run python -m backend.src.migration.main --action drop
-```
-Разворачиваем Potgres
-```bash
-docker-compose up -d postgres
 ```
 Запустите FastAPi
 ```bash
