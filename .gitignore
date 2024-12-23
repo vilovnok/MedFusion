@@ -6,3 +6,8 @@
 /dataset
 *.jsonl
 dataset/dataset.jsonl
+/frontend/node_modules
+/node_modules
+/node_modules/
+node_modules/
+**/node_modules/:
