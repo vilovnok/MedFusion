@@ -118,19 +118,3 @@ docker-compose up -d qdrant
 ## Контакты
 [Richard Gurtsiev](https://t.me/r1char9)      
 [Maxim](https://t.me/board_and_sword)   
->>>>>>> prox
-
-
-# Серверная часть приложения, отвечающая за обработку данных и предоставление API
-│   └── src/                   
-│       ├── api/               
-│       ├── db/                
-│       ├── migration/         
-│       ├── models/            
-│       ├── repo/              
-│       ├── schemas/           
-│       ├── services/          
-│       ├── utils/             
-│       ├── config.py          
-│       └── main.py            
-│
