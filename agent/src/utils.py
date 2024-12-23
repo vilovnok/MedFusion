@@ -1,7 +1,5 @@
 import yaml
-
 from enum import Enum
-
 
 class ModelType(Enum):
     MISTRAL = "mistral-large-latest"
