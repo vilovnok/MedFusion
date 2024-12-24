@@ -58,10 +58,29 @@ MedFusion/
 
 
 ### Деплой
-Клонируйте репозиторий
+
+1. Клонируйте репозиторий
 ```bash
-git clone https://github.com/vilovnok/MedFusion.git
-cd MedFusion
+git clone https://github.com/vilovnok/MedFusion.git && cd MedFusion
+```
+
+2. Определяем файлы
+```bash
+chmod +x setup.sh run.sh
+```
+3. Подгрузите все зависимости
+```bash
+./setup.sh
+```
+4. Запускаем сервис
+```bash
+./run.sh
+```
+
+### Deploy Step-By-Step
+1.Клонируйте репозиторий
+```bash
+git clone https://github.com/vilovnok/MedFusion.git && cd MedFusion
 ```
 
 Подгрузите все зависимости
@@ -91,10 +110,8 @@ poetry run python -m backend.src.main
 
 Qdrant был уже развернут на удаленном сервере по адресу: [address](http://77.234.216.100:6333/dashboard#/collections)  
 Если есть желание развернуть на локальном уровне, то нужно будет использовать snapshot, который можно будет получить у разработчиков.
-Разворачиваем Qdrant
-```bash
-docker-compose up -d qdrant
-```
+
+
 ## Документация для получения ключа Mistrial.AI
 [Документация](https://github.com/vilovnok/MedFusion/tree/master/docs)
 ## Контакты

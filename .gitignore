@@ -7,3 +7,4 @@ poetry.lock
 *.jsonl
 dataset/dataset.jsonl
 frontend/node_modules/
+venv/
