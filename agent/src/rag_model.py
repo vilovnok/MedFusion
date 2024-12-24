@@ -23,9 +23,9 @@ def medical_retriever_function(query, array):
         localhost='77.234.216.100',
         device=0,
         dense_search=True,
-        sparse_search=False,#False
+        sparse_search=False,
     )
-    coll_name="medfusion"#"med_db_e5_large"#"med_db_e5_large_bm42"
+    coll_name="medfusion"
     replies = retriever.search(
         query = query,
         collection_name=coll_name,
@@ -88,6 +88,8 @@ class MedFusionLLM:
                 hf_token:str=None,
                 token:str=None) -> None:
         
+
+        print(f'Model Name: {model_name}')
         self.api_key = api_key
         self.hf_token = hf_token
         self._model_type = model_type 

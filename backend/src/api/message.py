@@ -24,6 +24,13 @@ async def check_token(
     res = await MessageService().check_token(uow, data)
     return res
 
+@router.post('/get-token', status_code=201)
+async def get_token(
+    data: Message,
+    uow: UOWDep
+):
+    res = await MessageService().get_token(uow, data)
+    return res
 
 @router.post('/get-messages', status_code=201)
 async def get_messages(
