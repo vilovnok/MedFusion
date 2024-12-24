@@ -7,7 +7,7 @@ from .action import *
 from ..config import *
 
 
-DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+DATABASE_URL=f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 engine = create_async_engine(DATABASE_URL)
 
 
@@ -28,7 +28,6 @@ async def create_tables():
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    
     parser = argparse.ArgumentParser()
     parser.add_argument("--action", type=str, required=True)
     args = parser.parse_args()
