@@ -25,13 +25,13 @@ services:
   #   environment:
   #     - DATABASE_URL=postgresql://postgres:1234@db:5555/medfusion
 
-  qdrant:
-    container_name: qdrant
-    image: qdrant/qdrant:latest
-    ports:
-      - "6333:6333"
-    volumes:
-      - qdrant_storage:/qdrant/storage  
+  # qdrant:
+  #   container_name: qdrant
+  #   image: qdrant/qdrant:latest
+  #   ports:
+  #     - "6333:6333"
+  #   volumes:
+  #     - qdrant_storage:/qdrant/storage  
 
   postgres:
     container_name: postgres
@@ -50,7 +50,7 @@ services:
       - postgres_storage:/var/lib/postgresql/data
 
 volumes:
-  qdrant_storage:
-    driver: local
+  # qdrant_storage:
+  #   driver: local
   postgres_storage:
     driver: local

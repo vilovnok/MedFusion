@@ -28,10 +28,11 @@ export class ChatComponent implements OnInit {
   istyping: boolean = false;
   isPlaye: boolean = false;
 
-  ngOnInit(): void {
-    this.checkToken();  
+  ngOnInit(): void {    
+    // this.checkToken();
     const reqBody = {'user_id':this.service.getFromLS('user_id')}
     this.getMessage(reqBody);
+    this.getTokenD(reqBody);
   }
 
   input_text: string = '';
@@ -67,8 +68,6 @@ export class ChatComponent implements OnInit {
             liked?: boolean, isCollapsed?: boolean, 
             collapsibleText?: string): void {
 
-    console.log(collapsibleText);
-
     this.messages.push({ 'role': role, 
       'text': text, 'liked': liked !== undefined ? liked : null, 
       'isCollapsed': isCollapsed, 
@@ -91,7 +90,7 @@ export class ChatComponent implements OnInit {
       this.input_text = '';
       return;
     }
-    if (!this.service.getFromLS('token')) { 
+    else if (!this.service.getFromLS('token')) { 
       this.showDialog('2');      
       return;
     }      
@@ -127,10 +126,10 @@ export class ChatComponent implements OnInit {
       this.addMessage(role, bot_text);
       this.istyping = false;
       this.isPlaye = false;
-      this.service.rmFromLS('token');
+      localStorage.removeItem('token');
       this.showDialog('2');     
     });
-    this.input_text = '';
+    // this.input_text = '';
   }
 
   showDialog(text: string='') {
@@ -150,34 +149,44 @@ export class ChatComponent implements OnInit {
           "token": api_key,
           "user_id": this.service.getFromLS('user_id') 
         }
-        this.getToken(reqBody);  
+        this.checkToken(reqBody);  
     });
   }
-
-  checkToken() {
-    const reqBody={'user_id':localStorage.getItem('user_id')}
-    if (!this.service.getFromLS('user_id')){
-      this.router.navigate(['reg']);
-      this.toaster.error({
-        detail: "ERROR",
-        summary: "Вы должны зарегистрироваться 😊"
-      });
-      return;
-    }
-    if (this.service.getFromLS('token')){
-      this.isPlaye = true;
-      return;
-    }
-    this.getToken(reqBody);
-  }
-
-  getToken(reqBody: any) {
+  checkToken(reqBody: any) {
     this.service.handle_post_requests(reqBody, 'agent/check-token').subscribe(response => {
       localStorage.setItem('token', response.token);
       this.isPlaye = true;
     },error => {      
         this.showDialog('2'); 
-        this.service.rmFromLS('token');
+        localStorage.removeItem('token');
+      this.isPlaye = false;
+    });
+  }
+
+  // checkTokena() {
+  //   const reqBody={'user_id':localStorage.getItem('user_id')}
+  //   if (!this.service.getFromLS('user_id')){
+  //     this.router.navigate(['reg']);
+  //     this.toaster.error({
+  //       detail: "ERROR",
+  //       summary: "Вы должны зарегистрироваться 😊"
+  //     });
+  //     return;
+  //   }
+  //   this.checkToken(reqBody);
+  // }
+
+
+  getTokenD(reqBody: any){
+    if (localStorage.getItem('token')) {
+      this.isPlaye = true;  
+      return;
+    }
+    this.service.handle_post_requests(reqBody, 'agent/get-token').subscribe(response => {
+      this.isPlaye = true;
+      localStorage.setItem('token', response.token);
+    },error => {      
+        this.showDialog('1'); 
       this.isPlaye = false;
     });
   }
