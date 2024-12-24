@@ -95,6 +95,8 @@ Qdrant был уже развернут на удаленном сервере �
 ```bash
 docker-compose up -d qdrant
 ```
+## Документация для получения ключа Mistrial.AI
+[Документация](https://github.com/vilovnok/MedFusion/tree/master/docs)
 ## Контакты
 [Richard Gurtsiev](https://t.me/r1char9)      
 [Maxim Кузницов](https://t.me/board_and_sword)
