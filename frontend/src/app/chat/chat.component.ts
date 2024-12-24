@@ -28,11 +28,11 @@ export class ChatComponent implements OnInit {
   istyping: boolean = false;
   isPlaye: boolean = false;
 
+
   ngOnInit(): void {    
-    // this.checkToken();
     const reqBody = {'user_id':this.service.getFromLS('user_id')}
+    this.getToken(reqBody);
     this.getMessage(reqBody);
-    this.getTokenD(reqBody);
   }
 
   input_text: string = '';
@@ -47,7 +47,7 @@ export class ChatComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustHtml(formattedText);
   }
 
-  messages: { role: string; text: string; liked: boolean | null; collapsibleText?: string; isCollapsed?: boolean;  }[] = [
+  messages: { role: string; text: string; liked: boolean | null; collapsibleText?: string; isCollapsed?: boolean; id?: number  }[] = [
     {
       'role': 'ai',
       'text': "Привет! Я MedFusion - твой персональный помощник по доказательной медицине.\n\nОсобенности:\n1) В моей базе данных содержатся только обзоры статей с сайта доказательной медицины [Cochrane Library][https://www.cochranelibrary.com/cdsr/table-of-contents], опубликованные с 2003 года по ноябрь 2024 года. В моей базе данных нет клинических рекомендаций, но я все равно постараюсь тебе помочь!\n2) Я умею отвечать на общие медицинские вопросы, а также искать информацию по конкретной статье (по точному названию или по ссылке на doi)\n3) В нашем диалоге я помню только последние три сообщения. Историю чата можно сбросить при нажатии кнопки clear \n4) По окончании диалога, пожалуйста оставьте обратную связь, нажав на 👍/👎",
@@ -66,12 +66,13 @@ export class ChatComponent implements OnInit {
 
   addMessage(role: string, text: string, 
             liked?: boolean, isCollapsed?: boolean, 
-            collapsibleText?: string): void {
+            collapsibleText?: string, id?: number): void {
 
     this.messages.push({ 'role': role, 
       'text': text, 'liked': liked !== undefined ? liked : null, 
       'isCollapsed': isCollapsed, 
-      'collapsibleText': collapsibleText
+      'collapsibleText': collapsibleText,
+      'id': id,
     });
 
     this.scrollToBottom();
@@ -90,7 +91,7 @@ export class ChatComponent implements OnInit {
       this.input_text = '';
       return;
     }
-    else if (!this.service.getFromLS('token')) { 
+    if (!localStorage.getItem('token') || localStorage.getItem('token') === undefined) { 
       this.showDialog('2');      
       return;
     }      
@@ -105,19 +106,19 @@ export class ChatComponent implements OnInit {
 
     const reqBody = {      
       "text": human_text,
-      "user_id": this.service.getFromLS('user_id')
+      "user_id": localStorage.getItem('user_id')
     }
 
     this.service.handle_post_requests(reqBody, 'agent/generate').subscribe(async response => {
       
-      await this.sleep(2000);
+      await this.sleep(1000);
       this.istyping = false;
       const role = response['role']
-      const bot_text = response['ai_text']
+      const ai_text = response['ai_text'].trim().slice(0, response['ai_text'].trim().indexOf('**Ссылки**'))
       const liked = response['liked']
       const metadata = response['full_metadata']
-      this.addMessage(role, bot_text, liked, true, metadata);
-
+      const id = response['id']
+      this.addMessage(role, ai_text, liked, true, metadata, id);
     }, async error => {
       
       await this.sleep(2000);
@@ -127,9 +128,9 @@ export class ChatComponent implements OnInit {
       this.istyping = false;
       this.isPlaye = false;
       localStorage.removeItem('token');
-      this.showDialog('2');     
+      this.showDialog('2');   
+      this.input_text = ''
     });
-    // this.input_text = '';
   }
 
   showDialog(text: string='') {
@@ -163,31 +164,20 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  // checkTokena() {
-  //   const reqBody={'user_id':localStorage.getItem('user_id')}
-  //   if (!this.service.getFromLS('user_id')){
-  //     this.router.navigate(['reg']);
-  //     this.toaster.error({
-  //       detail: "ERROR",
-  //       summary: "Вы должны зарегистрироваться 😊"
-  //     });
-  //     return;
-  //   }
-  //   this.checkToken(reqBody);
-  // }
-
-
-  getTokenD(reqBody: any){
-    if (localStorage.getItem('token')) {
-      this.isPlaye = true;  
-      return;
-    }
+  getToken(reqBody: any){
     this.service.handle_post_requests(reqBody, 'agent/get-token').subscribe(response => {
       this.isPlaye = true;
       localStorage.setItem('token', response.token);
     },error => {      
+      if (error.status === 400){
         this.showDialog('1'); 
-      this.isPlaye = false;
+        this.isPlaye = false;
+      }
+      if (error.status === 404){
+        this.router.navigate(['reg']); 
+        this.isPlaye = false;
+      }
+
     });
   }
 
@@ -207,6 +197,7 @@ export class ChatComponent implements OnInit {
   getMessage(reqBody: any) {
 
     interface Message {
+      id?: number
       user_id: number;
       ai_text?: string; 
       human_text?: string;
@@ -224,22 +215,28 @@ export class ChatComponent implements OnInit {
           this.addMessage('human', message.human_text.trim());
         }
         if (message.ai_text) {
-          this.addMessage('ai', message.ai_text.trim(), message.liked, true, message.full_metadata);
+          const ai_text = message.ai_text.trim().slice(0, message.ai_text.trim().indexOf('**Ссылки**'))
+          this.addMessage('ai', ai_text, message.liked, true, message.full_metadata, message.id);
         }
       });
-    }, err => console.log(err));
+    }, err => {
+      if (err.status === 404){
+        this.router.navigate(['reg']);
+      }
+      
+    });
   }
 
 
   onLike(item: any): void {
     item.liked = true;
-    const reqBody = {'liked':item.liked , 'text':item.text, 'user_id':this.service.getFromLS('user_id')}
+    const reqBody = {'liked':item.liked , 'user_id':localStorage.getItem('user_id'), 'message_id':item.id}
     this.changeLike(reqBody);
   }
 
   onDislike(item: any): void {
     item.liked = false;
-    const reqBody = {'liked':item.liked , 'text':item.text, 'user_id':this.service.getFromLS('user_id')}
+    const reqBody = {'liked':item.liked , 'user_id':localStorage.getItem('user_id'), 'message_id':item.id}
     this.changeLike(reqBody);
   }
 
@@ -248,6 +245,33 @@ export class ChatComponent implements OnInit {
     const reqBody = {'user_id': this.service.getFromLS('user_id')}
     this.service.handle_post_requests(reqBody, 'agent/clear-chat').subscribe(response => {
       window.location.reload();
+    });
+  }
+
+
+
+  OpinionDialog(id: number=0) {
+    console.log(id);
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '300px',
+      height: '360px',
+      data: {'text':'3'}
+    });
+
+    dialogRef.afterClosed().subscribe((opinion: string) => {
+      if (!opinion.trim()) { 
+        this.showDialog('2');      
+        return;
+      }      
+        const reqBody = { 
+          "opinion": opinion,
+          "user_id": localStorage.getItem('user_id') ,
+          "message_id":id
+        }
+        this.service.handle_post_requests(reqBody, 'agent/add-opinion').subscribe(response => {
+
+        });
+        
     });
   }
 }

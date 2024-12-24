@@ -46,16 +46,17 @@ export class RegisterComponent implements OnInit {
         error: (err) => {
           if (err.status === 422){
             this.toaster.error({
-              detail: "❌ ERROR",
-              summary: "Пожалуйста, проверьте вами введённые данные 🔍"
+              detail: "ERROR",
+              summary: "Пожалуйста, проверьте данные 🔍 1) Email можно выдумать 😅️️️️️️ 👉️️️️️️ ✨️️️️️️️  2) Password должен содержать не менее 8 символов.",
+              duration: 5000
             });
           return;            
           }          
-          this.toaster.error({ detail: "❌️️️️️️️ ERROR", summary: err.error.detail })
+          this.toaster.error({ detail: "ERROR", summary: "Пользователь с таким email уже существует 🙃️️️️️️" })
         }
       });
     } else {
-      this.toaster.error({ detail: "❌️️️️️️️ ERROR", summary: "Пожалуйста, зполните форму 😅️️️️️️", duration: 5000 });
+      this.toaster.error({ detail: "ERROR", summary: "Пожалуйста, зполните форму 😊️️️️️️", duration: 5000 });
     }
   }
 }
