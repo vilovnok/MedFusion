@@ -11,15 +11,6 @@ services:
     expose:
       - 80   
 
-# # ДОРАБАТВАЕМ
-  # agent:
-  #   container_name: agent
-  #   build: .
-  #   environment:
-  #     - DATABASE_URL=postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}
-  #   depends_on:
-  #     - postgres
-
   postgres:
     container_name: postgres
     image: postgres:14-alpine 
@@ -37,6 +28,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+
+# # ДОРАБАТВАЕМ
+  # agent:
+  #   container_name: agent
+  #   build: .
+  #   environment:
+  #     - DATABASE_URL=postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}
+  #   depends_on:
+  #     - postgres
 
   # qdrant:
   #   container_name: qdrant
