@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from .api.routers import all_routers
 from fastapi.middleware.cors import CORSMiddleware
 
-# bE3qXub1g7lA5QehZjV6fSezEdSkpRZH
 
 app = FastAPI(title='RestAPI')
 origins = ['http://localhost:4200','http://localhost','http://0.0.0.0:80' 'http://127.0.0.1:4200']

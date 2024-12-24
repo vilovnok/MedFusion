@@ -1,38 +1,31 @@
 version: "3.8"
 
-
 services:  
-  # angular:
-  #   container_name: angular
-  #   restart: always  
-  #   build: 
-  #     context: ./frontend
-  #   ports:
-  #     - "80:80"
-  #   expose:
-  #     - 80   
-
-# ДОРАБАТВАЕМ
-  agent:
-    container_name: agent
-    build:
-      dockerfile: Dockerfile    
-    image: agent
-    env_file:
-      - .env
-    depends_on:
-      - postgres
+  angular:
+    container_name: angular
+    restart: always  
+    build: 
+      context: ./frontend
     ports:
-      - "8000:8000"
-    environment:
-      - "postgresql+asyncpg://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}"
+      - "80:80"
+    expose:
+      - 80   
+
+# # ДОРАБАТВАЕМ
+  # agent:
+  #   container_name: agent
+  #   build: .
+  #   environment:
+  #     - DATABASE_URL=postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}
+  #   depends_on:
+  #     - postgres
 
   postgres:
     container_name: postgres
     image: postgres:14-alpine 
     restart: unless-stopped
     ports:
-      - "${DB_PORT}:5432"
+      - "5433:5432"
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
@@ -40,7 +33,7 @@ services:
     volumes:
       - postgres_storage:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -h ${DB_HOST}"]
+      test: ["CMD-SHELL", "pg_isready -d medfusion -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -52,7 +45,6 @@ services:
   #     - "6333:6333"
   #   volumes:
   #     - qdrant_storage:/qdrant/storage  
-
 
 volumes:
   # qdrant_storage:
