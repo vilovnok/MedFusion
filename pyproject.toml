@@ -21,9 +21,6 @@ huggingface-hub = "^0.26.2"
 langchain-huggingface = "^0.1.2"
 fastapi = "^0.115.4"
 uvicorn = "^0.32.0"
-kombu = "^5.4.2"
-celery = "^5.4.0"
-redis = "^5.2.0"
 passlib = "^1.7.4"
 asyncpg = "^0.30.0"
 pydantic = {extras = ["email"], version = "^2.10.4"}
@@ -31,6 +28,7 @@ greenlet = "^3.1.1"
 psycopg2-binary = "^2.9.10"
 mistral = "^19.0.0"
 einops = "^0.8.0"
+sqlalchemy
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.5"

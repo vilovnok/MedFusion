@@ -8,35 +8,41 @@ from ..config import DB_HOST, DB_USER, DB_PASS
 
 class AuthService:
     async def register(self, uow: IUnitOfWork, data: AuthRegister):
-        user_model = UserCreate(
-            email=data.email,
-            password=data.password
-        )
-        print('\n')
-        print(DB_HOST, DB_USER, DB_PASS)
-        print(DB_HOST, DB_USER, DB_PASS)
-        print('\n')
-        
-        async with uow:
-            email_checker = await uow.user.get_one(email=data.email, n_tab=0)
     
-            if email_checker:
+        async with uow:
+            try:
+                email_checker = await uow.user.get_one(email=data.email, n_tab=0)
+
+                user_model = UserCreate(
+                email=data.email,
+                password=data.password
+                )
+                print('\n')
+                print(DB_HOST, DB_USER, DB_PASS)
+                print(DB_HOST, DB_USER, DB_PASS)
+                print('\n')
+
+
+                if email_checker:
+                    await uow.rollback()
+                    raise HTTPException(status_code=400, detail='Пользователь с таким email уже существует 🙃️️️️️️❌️️️️️️️')
+
+                user = await uow.user.add_one(user_model.model_dump(), n_tab=0)           
+
+                if not user:                
+                    await uow.rollback()
+                    raise HTTPException(status_code=400)
+                await uow.commit()
+
+                res = {
+                    'user_id': f'{user.id}', 
+                    'message':"Вы зарегистрированы 🙂️️🔥️️️️️️✅️️️️️️️"
+                }
+
+                return res
+            except Exception as e:
                 await uow.rollback()
-                raise HTTPException(status_code=400, detail='Пользователь с таким email уже существует 🙃️️️️️️❌️️️️️️️')
-            
-            user = await uow.user.add_one(user_model.model_dump(), n_tab=0)           
-            
-            if not user:                
-                await uow.rollback()
-                raise HTTPException(status_code=400)
-            await uow.commit()
-            
-            res = {
-                'user_id': f'{user.id}', 
-                'message':"Вы зарегистрированы 🙂️️🔥️️️️️️✅️️️️️️️"
-            }
-            
-            return res
+                raise HTTPException(status_code=500, detail=f'Ошибка в регистрации: {str(e)}')
         
 
     async def login(self, uow: IUnitOfWork, data: AuthLogin):

@@ -7,8 +7,9 @@ COPY agent /medfusion/agent
 COPY pyproject.toml /medfusion/
 
 RUN pip install poetry
-RUN poetry install --no-root
-
+# RUN poetry install --no-root
+# RUN poetry shell
+# RUN poetry run python -m backend.src.migration.main --action create
 EXPOSE 8000
 
 CMD poetry run python -m backend.src.main
