@@ -2,13 +2,8 @@
 *.ipynb
 **/.git
 *.venv
-*poetry.lock
+poetry.lock
 /dataset
 *.jsonl
 dataset/dataset.jsonl
-/frontend/node_modules
-/node_modules
-/node_modules/
-node_modules/
-**/node_modules/:node_modules/
 frontend/node_modules/

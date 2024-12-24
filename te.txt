@@ -1,18 +1,1 @@
-python = "^3.10"
-langchain = "^0.3.7"
-langchain-community = "^0.3.5"
-qdrant-client = "^1.12.1"
-datasets = "^3.1.0"
-langchain-mistralai = "^0.2.1"
-mistralai = "^1.2.0"
-
-sentence-transformers = "^3.2.1"
-langchain-qdrant = "^0.2.0"
-rank-bm25 = "^0.2.2"
-huggingface-hub = "^0.26.2"
-langchain-huggingface = "^0.1.2"
-
-pydantic = "2.7.4"
-pydantic-extra-types = "2.0.0"
-pydantic-settings = "2.0.3"
-pydantic-core = "2.18.4"
+# bE3qXub1g7lA5QehZjV6fSezEdSkpRZH

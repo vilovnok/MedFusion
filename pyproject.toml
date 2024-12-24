@@ -28,11 +28,11 @@ greenlet = "^3.1.1"
 psycopg2-binary = "^2.9.10"
 mistral = "^19.0.0"
 einops = "^0.8.0"
-sqlalchemy
+sqlalchemy = "^2.0.36"
+
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "^6.29.5"
-
 
 
 [build-system]
