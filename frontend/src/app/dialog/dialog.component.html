@@ -1,12 +1,13 @@
-<h1 mat-dialog-title>Подключение к модели</h1>
+<h1 mat-dialog-title>{{title}}</h1>
 <div mat-dialog-content>
   {{this.di_text}}
   <mat-form-field appearance="fill">    
-    <p style="padding-top: 10px; margin: 0; font-size: 14px;"><mat-label>Ключ подключения</mat-label></p>
-    <input style="padding: 0; margin: 0;" matInput [(ngModel)]="api_key" name="api_key" placeholder="Введите ключ">
+    <p style="padding-top: 10px; margin: 0; font-size: 14px;"><mat-label>{{label}}</mat-label></p>
+    <input style="padding: 0; margin: 0;" matInput [(ngModel)]="api_key" name="api_key" placeholder="Введите">
   </mat-form-field>
 </div>
+
 <div mat-dialog-actions class="action">
   <button class="dialog-button close" mat-button (click)="onClose()">Закрыть</button>
-  <button class="dialog-button connect" mat-button  [mat-dialog-close]="api_key">Подключиться</button>
+  <button class="dialog-button connect" mat-button  [mat-dialog-close]="api_key">{{action}}</button>
 </div>

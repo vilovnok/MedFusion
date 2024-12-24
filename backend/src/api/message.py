@@ -55,3 +55,11 @@ async def clean_chat(
 ):
     res = await MessageService().clear_chat(uow, data)
     return res
+
+@router.post('/add-opinion', status_code=201)
+async def add_opinion(
+    data: Message,
+    uow: UOWDep
+):
+    res = await MessageService().add_opinion(uow, data)
+    return res

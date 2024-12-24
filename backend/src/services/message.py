@@ -3,6 +3,8 @@ from ..schemas.messages import *
 from ..schemas.user import *
 from ..models.user import User
 from ..models.messages import Message as Core
+from ..models.messages import Metrics
+
 from fastapi import HTTPException
 from agent.src import MedFusionLLM
 from agent.src.utils import ModelType
@@ -46,7 +48,7 @@ class MessageService:
                 response, full_metadata = agent.invoke(user_input=data.text, chat_history=chat_history)
                 
                 if full_metadata:
-                    full_metadata = "\n".join([f'[{title}][{link}]-{date}' for title, _, date, link in full_metadata])
+                    full_metadata = "\n".join([f'{idx+1}) [{title}][{link}]({date})' for idx, (title, _, date, link) in enumerate(full_metadata)])
                     full_metadata = f'**Ссылки** \n{full_metadata}'
                 else:
                     full_metadata = None
@@ -68,12 +70,13 @@ class MessageService:
                     full_metadata=full_metadata
                 )         
                 await uow.message.add_one(user_model.model_dump(), n_tab=0)  
+                message = await uow.message.add_one(user_model.model_dump(), n_tab=1)  
                 await uow.commit()
-
-                return {'role':'ai','ai_text': response, 'full_metadata':full_metadata}
+                
+                return {'role':'ai','ai_text': response, 'full_metadata':full_metadata, 'id':message.id}
             except Exception as err:
                 await uow.rollback()
-                raise HTTPException(status_code=400, detail="Ошибка при добавлении сообщения в БД. Error: %s" % err)
+                raise HTTPException(status_code=400, detail="Ошибка при добавлении сообщения в БД. %s" % err)
         
 
     async def check_token(self, uow: IUnitOfWork, data: Message):
@@ -85,17 +88,21 @@ class MessageService:
             if not token:
                 raise HTTPException(status_code=404, detail='Токен не найден.')        
 
-            self.check_inf(token=token)
-            
-            await uow.user.update(where=[User.id==int(user_id)], n_tab=0, values={'token': token})            
-            await uow.commit()
-            
-            return {
+            try:
+                self.check_inf(token=token)
+                await uow.user.update(where=[User.id==int(user_id)], n_tab=0, values={'token': token})            
+                await uow.commit()
+                return {
                     "status": "success",                    
                     "message": "Модель подключена и работает корректно.",
                     "token": token
                 }
-            
+            except Exception as err:
+                await uow.user.update(where=[User.id==int(user_id)], n_tab=0, values={'token': None})            
+                await uow.commit()
+                raise HTTPException(status_code=400, detail="Ошибка при проверке токена. %s" % err)
+
+
     async def get_messages(self, uow: IUnitOfWork, data: MessageCreate):
         async with uow:
             checker = await uow.user.get_one(id=data.user_id, n_tab=0)
@@ -104,9 +111,8 @@ class MessageService:
             try:
                 messages = await uow.message.get_all(n_tab=0, user_id=int(data.user_id))
                 messages_post = MessageReadAll(**data.model_dump(), posts=messages)                        
-            
             except Exception as err:
-                raise HTTPException(status_code=400, detail="Что-то не так с вашеми данными.")            
+                raise HTTPException(status_code=400, detail=f"{err}")            
 
             if messages_post:
                 return {
@@ -122,11 +128,11 @@ class MessageService:
             try:
                 liked = data.liked
                 checker = await uow.user.get_one(id=int(data.user_id), n_tab=0)
-
                 if not checker:
                     raise HTTPException(status_code=404, detail='Такого пользователя не существует!')        
 
-                await uow.message.update(where=[User.id==int(data.user_id), Core.ai_text==data.text], n_tab=0, values={'liked': liked})            
+                await uow.message.update(where=[Core.user_id==int(data.user_id), Core.id==data.message_id], n_tab=0, values={'liked': liked})            
+                await uow.message.update(where=[Metrics.id==data.message_id, Metrics.user_id==int(data.user_id)], n_tab=1, values={'liked': liked})            
                 await uow.commit()
 
                 return {
@@ -135,7 +141,7 @@ class MessageService:
                 }
             except Exception as err:
                 await uow.rollback()
-                raise HTTPException(status_code=400, detail="Ошибка при изменении лайка.")
+                raise HTTPException(status_code=400, detail=f"{err}")
             
     async def clear_chat(self, uow: IUnitOfWork, data: Message):
         async with uow:
@@ -149,24 +155,35 @@ class MessageService:
                 }
             except Exception as err:
                 await uow.rollback()
-                raise HTTPException(status_code=400, detail="Ошибка при изменении db.")
+                raise HTTPException(status_code=400, detail=f"{err}")
             
     async def get_token(self, uow: IUnitOfWork, data: Message):
         async with uow:
-            try:
                 user = await uow.user.get_one(id=int(data.user_id), n_tab=0)
                 token = user.token
-
+                
+                if not user:
+                    raise HTTPException(status_code=404, detail="Пользователь не найден.")                
                 if not token:
                     raise HTTPException(status_code=400, detail="Токена нет!")
-
-                self.check_inf(token=token)
-
+                
                 return {
                     "status": "success",
                     "message":'Токен в базе есть!',
                     'token':token,
                 }
+
+
+            
+    async def add_opinion(self, uow: IUnitOfWork, data: Message):
+        async with uow:
+            try:
+                await uow.message.update(where=[Metrics.id==data.message_id], n_tab=1, values={'opinion': data.opinion})            
+                await uow.commit()                
+                return {
+                        "status": "success",
+                        "message":'Спасибо за мнение!',                        
+                    }
             except Exception as err:
                 await uow.rollback()
-                raise HTTPException(status_code=400, detail=f"Error: {err}")
+                raise HTTPException(status_code=400, detail=f"{err}")

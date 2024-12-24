@@ -9,10 +9,11 @@ class Message(Base):
     __table_args__ = {'extend_existing': True}
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True, autoincrement=True, unique=True)  
-    user_id = Column(Integer, ForeignKey('user.id'), primary_key=True, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True, nullable=False)
     ai_text = Column(String, nullable=False)
     human_text = Column(String, nullable=False)
     liked = Column(Boolean)
+    opinion = Column(String)
     full_metadata = Column(String)
     created_at = Column(
         TIMESTAMP(timezone=True),
@@ -24,6 +25,35 @@ class Message(Base):
             id=self.id,
             user_id=self.user_id,
             ai_text=self.ai_text,
+            human_text=self.human_text,
+            liked=self.liked,
+            opinion=self.opinion,
+            full_metadata=self.full_metadata,
+            created_at=self.created_at
+        )
+    
+class Metrics(Base):
+    __tablename__ = 'metrics'
+    __table_args__ = {'extend_existing': True}
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True, autoincrement=True, unique=True)  
+    user_id = Column(Integer, ForeignKey('users.id'), primary_key=True, nullable=False)
+    ai_text = Column(String, nullable=False)
+    human_text = Column(String, nullable=False)
+    liked = Column(Boolean)
+    opinion = Column(String)
+    full_metadata = Column(String)
+    created_at = Column(
+        TIMESTAMP(timezone=True),
+        server_default=text("TIMEZONE('Europe/Moscow', CURRENT_TIMESTAMP)"),
+        onupdate=text("TIMEZONE('Europe/Moscow', CURRENT_TIMESTAMP)")
+    )
+    def to_read_model(self) -> MessageRead:
+        return MessageRead(
+            id=self.id,
+            user_id=self.user_id,
+            ai_text=self.ai_text,
+            opinion=self.opinion,
             human_text=self.human_text,
             liked=self.liked,
             full_metadata=self.full_metadata,

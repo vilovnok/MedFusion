@@ -79,7 +79,7 @@ class SQLAlchemyRepository(AbstractRepository):
         except Exception as e:
             return None
         
-    async def delete(self,n_tab:int, **filter_by):
+    async def delete(self, n_tab:int, **filter_by):
         try:
             stmt = delete(self.model[n_tab]).filter_by(**filter_by)
             await self.session.execute(stmt)
@@ -92,18 +92,3 @@ class SQLAlchemyRepository(AbstractRepository):
         res = await self.session.execute(stmt)
         res = [row for row in res.all()]
         return res
-    
-    async def find_all_events(self, n_tab:int, percent:int, **filter_by):
-        try:
-            stmt = select(self.model[n_tab]).filter_by(**filter_by)
-            res = await self.session.execute(stmt)
-            res = [row[0].to_read_model().fuid_raw for row in res.all()]
-            prevent_count = int(len(res) * (percent/100))        
-            res = sorted(res)[:prevent_count:]
-            return res
-        except Exception:
-            return None
-
-
-
-# test=# INSERT INTO events ("run_number","event_number","type","version","fuid_raw","dsid") VALUES ('280308042','377', 'RAW' ,'t0001' ,'c668f19f-1830-40cc-98e3-ecae651d9f15','3');

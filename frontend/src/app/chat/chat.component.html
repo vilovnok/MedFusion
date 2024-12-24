@@ -31,19 +31,26 @@
                         [ngClass]="{ 'liked': item.liked === true }">👍</button>
                     <button (click)="onDislike(item)" class="action-button"
                         [ngClass]="{ 'disliked': item.liked === false }">👎</button>
+                    <button class="toggle-button" (click)="OpinionDialog(item.id)">мнение</button>
                 </div>
             </div>
             <div class="chat-typing " *ngIf="istyping">
                 <p>печатает...</p>
             </div>
         </div>
-
         <div class="input_block">
             <div class="chat-container">
-                <textarea rows="2" [(ngModel)]="input_text" placeholder="Cообщить MedFusion"
-                    (keyup.enter)="generate()"></textarea>
+                <textarea 
+                    rows="2" 
+                    [(ngModel)]="input_text" 
+                    placeholder="Сообщить MedFusion"
+                    (keyup.enter)="generate()"
+                    [disabled]="istyping">
+                </textarea>
                 <div class="textarea-container">
-                    <button (click)="generate()">
+                    <button 
+                        (click)="generate()" 
+                        [disabled]="istyping">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
                             stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                             stroke-linejoin="round">
@@ -56,6 +63,8 @@
                 </div>
             </div>
         </div>
+
+
     </div>
 </div>
 
