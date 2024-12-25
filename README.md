@@ -10,8 +10,8 @@ MedFusion — это продвинутая система RAG, созданна
 - Повышать эффективность в изучение медицинского домена
 
 ## Ключевые особенности
-- Извлечение релевантной информации и ссылок из хранилища знаний
-- Сервис с развернутой базой знаний
+- Извлечение релевантной информации из хранилища знаний
+- Сервис с развернутой базой знаний (развернут удалено)
 - Использование моделей Mistrial для обработки и анализа медицинских данных (более подробно описано ниже)
 
 ## Структура проекта
@@ -75,37 +75,6 @@ chmod +x setup.sh run.sh
 4. Запускаем сервис
 ```bash
 ./run.sh
-```
-
-### Deploy Step-By-Step
-1.Клонируйте репозиторий
-```bash
-git clone https://github.com/vilovnok/MedFusion.git && cd MedFusion
-```
-
-Подгрузите все зависимости
-```bash
-pip install poetry
-poetry install
-poetry shell
-pip install fastembed-gpu
-```
-
-Разворачиваем Angular
-```bash
-docker-compose up -d angular
-```
-Разворачиваем Potgres
-```bash
-docker-compose up -d postgres
-```
-Создаем таблицы в Potgres с помощью ручки
-```bash
-poetry run python -m backend.src.migration.main --action create
-```
-Запустите FastAPI
-```bash
-poetry run python -m backend.src.main
 ```
 
 Qdrant был уже развернут на удаленном сервере по адресу: [address](http://77.234.216.100:6333/dashboard#/collections)  
