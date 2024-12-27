@@ -12,6 +12,7 @@ fi
 
 echo "Setting up dependencies..."
 poetry install
+poetry shell
 
 if [ $? -ne 0 ]; then
     echo "Error installing dependencies."
