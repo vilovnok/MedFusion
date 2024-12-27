@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Start Docker Compose
 echo "Starting Docker Compose..."
 docker-compose up -d
 
@@ -9,7 +8,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Insert data into PostgreSQL
 echo "Inserting data into PostgreSQL..."
 poetry run python -m backend.src.migration.main --action create
 
@@ -18,7 +16,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# Start FastAPI
 echo "Starting FastAPI agent..."
 poetry run python -m backend.src.main
 
