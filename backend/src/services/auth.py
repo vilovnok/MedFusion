@@ -10,39 +10,29 @@ class AuthService:
     async def register(self, uow: IUnitOfWork, data: AuthRegister):
     
         async with uow:
-            try:
                 email_checker = await uow.user.get_one(email=data.email, n_tab=0)
 
                 user_model = UserCreate(
                 email=data.email,
                 password=data.password
                 )
-                print('\n')
-                print(DB_HOST, DB_USER, DB_PASS)
-                print(DB_HOST, DB_USER, DB_PASS)
-                print('\n')
-
 
                 if email_checker:
                     await uow.rollback()
                     raise HTTPException(status_code=400, detail='Пользователь с таким email уже существует 🙃️️️️️️❌️️️️️️️')
+                try:
+                    user = await uow.user.add_one(user_model.model_dump(), n_tab=0)           
+                    await uow.commit()
 
-                user = await uow.user.add_one(user_model.model_dump(), n_tab=0)           
+                    res = {
+                        'user_id': f'{user.id}', 
+                        'message':"Вы зарегистрированы 🙂️️🔥️️️️️️✅️️️️️️️"
+                    }
 
-                if not user:                
+                    return res
+                except Exception as e:
                     await uow.rollback()
-                    raise HTTPException(status_code=400)
-                await uow.commit()
-
-                res = {
-                    'user_id': f'{user.id}', 
-                    'message':"Вы зарегистрированы 🙂️️🔥️️️️️️✅️️️️️️️"
-                }
-
-                return res
-            except Exception as e:
-                await uow.rollback()
-                raise HTTPException(status_code=500, detail=f'Ошибка в регистрации: {str(e)}')
+                    raise HTTPException(status_code=500, detail=f'Ошибка на этапе регистрации: {str(e)}')
         
 
     async def login(self, uow: IUnitOfWork, data: AuthLogin):

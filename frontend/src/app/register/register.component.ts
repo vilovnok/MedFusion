@@ -51,8 +51,13 @@ export class RegisterComponent implements OnInit {
               duration: 5000
             });
           return;            
-          }          
-          this.toaster.error({ detail: "ERROR", summary: "Пользователь с таким email уже существует 🙃️️️️️️" })
+          } 
+          else if (err.status === 500){          
+          this.toaster.error({ detail: "ERROR", summary: err.message });
+        }
+        else if (err.status === 400){
+          this.toaster.error({ detail: "ERROR", summary: 'Пользователь с похожим email уже существует!' });
+        }
         }
       });
     } else {
