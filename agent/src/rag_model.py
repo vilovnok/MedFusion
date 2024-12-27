@@ -9,11 +9,16 @@ from langchain_mistralai import ChatMistralAI
 from sentence_transformers import CrossEncoder
 from qdrant_client import models
 import ast
+import torch
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
 
 model = CrossEncoder(
     "jinaai/jina-reranker-v2-base-multilingual",
     automodel_args={"torch_dtype": "auto"},
     trust_remote_code=True,
+    device=device,
 )
 
 def medical_retriever_function(query, array):
@@ -21,7 +26,7 @@ def medical_retriever_function(query, array):
         model_type=DenseModelType.E5_LARGE,
         sparse_model_type=SparseModelType.BM42,
         localhost='77.234.216.100',
-        device=0,
+        device=device,
         dense_search=True,
         sparse_search=False,
     )
@@ -54,7 +59,7 @@ def medical_article_retriever_function(query, array):
         model_type=DenseModelType.E5_LARGE,
         sparse_model_type=SparseModelType.BM42,
         localhost='77.234.216.100',
-        device=0,
+        device=device,
         dense_search=True,
         sparse_search=False,#False
     )
@@ -73,7 +78,15 @@ def medical_article_retriever_function(query, array):
     )
 
     if replies:
+        print('______________')
+        print(replies)
+        print('+++++++++++++')
+        print(array)
+        print('--------------')
         array.extend([[v for k,v in reply[0].metadata.items() if k in ['title', 'authors', 'publication_date', 'doi_link']] for reply in replies])
+        print('##############')
+        print(array)
+        print('00000000000000')
         return '\n\n'.join([f"{reply[0].page_content}" for reply in replies])
     else:
         return 'There is no article for your request.'
@@ -140,7 +153,7 @@ You can't search using both filters at the same time. Only one!"""
             
             tools = [self.medical_retriever_tool, self.medical_article_retriever_tool]
             agent = create_react_agent(llm, tools, template)
-            _agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=False, handle_parsing_errors=True)
+            _agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True)
             return _agent_executor
         except Exception as err:
             raise ValueError(f'Что-то не так с параметрами модели: {err}')
@@ -156,6 +169,7 @@ You can't search using both filters at the same time. Only one!"""
             self.shared_array = []
             response = self._agent_executor({"input": user_input, 'chat_history': chat_history})['output']
             metadata = self.shared_array
+            print(metadata)
 
             return response, list(set(tuple(i) for i in metadata))
         except Exception as e:
