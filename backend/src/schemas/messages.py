@@ -3,6 +3,29 @@ from pydantic import BaseModel
 from .config import TunedModel
 from typing import List, Optional
 
+class Liked(BaseModel):
+    user_id: int=None    
+    liked: Optional[bool] = None
+    message_id: Optional[int]=None
+
+class AddOpinion(BaseModel):
+    user_id: int=None    
+    opinion: Optional[str]=None
+    message_id: Optional[int]=None
+
+class Generate(BaseModel):
+    user_id: int=None    
+    text: str=None 
+
+class CheckToken(BaseModel):
+    user_id: int=None    
+    token: str=None 
+
+class GetToken(BaseModel):
+    user_id: int=None    
+
+class ClearChat(BaseModel):
+    user_id: int=None    
 
 class Message(BaseModel):
     user_id: int=None    
@@ -19,7 +42,6 @@ class MessageCreate(BaseModel):
     ai_text: Optional[str]=None  
     full_metadata: Optional[str]=None
     opinion: Optional[str]=None
-
 
 class MessageRead(TunedModel):
     id: int

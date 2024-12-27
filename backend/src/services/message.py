@@ -22,16 +22,18 @@ class MessageService:
         
         errors_to_ignore = ['error response 401', 'error response 429']                
         if any(error in f'{response}'.lower() for error in errors_to_ignore):
-            raise HTTPException(status_code=401, detail='ТОкен не действиетлен.')
+            raise HTTPException(status_code=401, detail='Токен не действительный.')
         
         return response
 
-    async def generate(self, uow: IUnitOfWork, data: Message, limit:int):
+    async def generate(self, uow: IUnitOfWork, data: Generate, limit:int=4):
         async with uow:
 
             checker = await uow.user.get_one(id=data.user_id, n_tab=0)
             if not checker:
-                raise HTTPException(status_code=404, detail='Пользователь не найден.')
+                raise HTTPException(status_code=400, detail='Пользователь не найден!')
+            if not checker.token:
+                raise HTTPException(status_code=400, detail='Пользователь не имеет токена!')
 
             token = checker.token
             model_names = 'mistral-large-latest mistral-large-2411 mistral-large-2407 mistral-large-2402'.split()         
@@ -79,14 +81,14 @@ class MessageService:
                 raise HTTPException(status_code=400, detail="Ошибка при добавлении сообщения в БД. %s" % err)
         
 
-    async def check_token(self, uow: IUnitOfWork, data: Message):
+    async def check_token(self, uow: IUnitOfWork, data: CheckToken):
         async with uow:
 
             token = data.token     
             user_id = data.user_id
 
             if not token:
-                raise HTTPException(status_code=404, detail='Токен не найден.')        
+                raise HTTPException(status_code=400, detail='Токен не найден.')        
 
             try:
                 self.check_inf(token=token)
@@ -94,7 +96,7 @@ class MessageService:
                 await uow.commit()
                 return {
                     "status": "success",                    
-                    "message": "Модель подключена и работает корректно.",
+                    "message": "Модель подключена и работает корректно. Токен был добавлен базу.",
                     "token": token
                 }
             except Exception as err:
@@ -123,7 +125,7 @@ class MessageService:
             else:
                 raise HTTPException(status_code=400, detail="Лимит вашего токена истек.")
             
-    async def get_liked(self, uow: IUnitOfWork, data: Message):
+    async def get_liked(self, uow: IUnitOfWork, data: Liked):
         async with uow:
             try:
                 liked = data.liked
@@ -143,7 +145,7 @@ class MessageService:
                 await uow.rollback()
                 raise HTTPException(status_code=400, detail=f"{err}")
             
-    async def clear_chat(self, uow: IUnitOfWork, data: Message):
+    async def clear_chat(self, uow: IUnitOfWork, data: ClearChat):
         async with uow:
             try:
                 await uow.message.delete(user_id=int(data.user_id), n_tab=0)
@@ -157,7 +159,7 @@ class MessageService:
                 await uow.rollback()
                 raise HTTPException(status_code=400, detail=f"{err}")
             
-    async def get_token(self, uow: IUnitOfWork, data: Message):
+    async def get_token(self, uow: IUnitOfWork, data: GetToken):
         async with uow:
                 user = await uow.user.get_one(id=int(data.user_id), n_tab=0)
                 token = user.token
@@ -174,8 +176,7 @@ class MessageService:
                 }
 
 
-            
-    async def add_opinion(self, uow: IUnitOfWork, data: Message):
+    async def add_opinion(self, uow: IUnitOfWork, data: AddOpinion):
         async with uow:
             try:
                 await uow.message.update(where=[Metrics.id==data.message_id], n_tab=1, values={'opinion': data.opinion})            
