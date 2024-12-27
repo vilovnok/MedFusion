@@ -89,4 +89,4 @@ Qdrant был уже развернут на удаленном сервере �
 [Документация](https://github.com/vilovnok/MedFusion/tree/master/docs)
 ## Контакты
 [Richard Gurtsiev](https://t.me/r1char9)      
-[Maxim Кузницов](https://t.me/board_and_sword)
+[Maxim Kuznetsov](https://t.me/board_and_sword)
