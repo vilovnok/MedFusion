@@ -206,6 +206,8 @@ export class ChatComponent implements OnInit {
       full_metadata?: string;
   }
     this.service.handle_post_requests(reqBody, 'agent/get-messages').subscribe(response => {
+      
+      console.log(response['messages'].posts)
       const sortedPosts = response['messages'].posts.sort((a: any, b: any) => {
         return a.id - b.id;
       });

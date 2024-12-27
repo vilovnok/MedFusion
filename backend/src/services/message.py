@@ -113,6 +113,7 @@ class MessageService:
             try:
                 messages = await uow.message.get_all(n_tab=0, user_id=int(data.user_id))
                 messages_post = MessageReadAll(**data.model_dump(), posts=messages)                        
+                
             except Exception as err:
                 raise HTTPException(status_code=400, detail=f"{err}")            
 

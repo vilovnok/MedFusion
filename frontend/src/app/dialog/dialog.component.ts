@@ -44,10 +44,10 @@ export class DialogComponent implements OnInit {
       this.action = 'Подключиться'
     }
     else {
-      this.di_text = 'Поделитесь, пожалуйста, своим мнением о том, как агент ответил на ваш вопрос. Это поможет нам улучшить качество ответов!'
-      this.title = "Мнение"
+      this.di_text = 'Пожалуйста, расскажите, что именно вам понравилось или что можно улучшить в ответе модели.'
+      this.title = "Обратная связь"
       this.opinion = true
-      this.label = 'Ваше мнение'
+      this.label = 'Ваше обратная связь'
       this.action = 'Отправить'
     }
 
