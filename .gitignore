@@ -8,3 +8,5 @@ poetry.lock
 dataset/dataset.jsonl
 frontend/node_modules/
 venv/
+key.pub
+key-private
