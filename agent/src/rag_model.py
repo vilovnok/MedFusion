@@ -6,44 +6,96 @@ from agent.database.retriever import Retriever, DenseModelType, SparseModelType
 from agent.src.utils import ModelType
 from agent.src.med_prompts import get_prompt
 from langchain_mistralai import ChatMistralAI
-from sentence_transformers import CrossEncoder
 from qdrant_client import models
 import ast
+import onnxruntime as ort
+import numpy as np
 import torch
+from transformers import AutoTokenizer
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+# Загрузка ONNX модели
+onnx_model_path = "./jina-reranker-v2-base-multilingual/model.onnx"
+onnx_session = ort.InferenceSession(onnx_model_path)
+
+# Токенайзер
+tokenizer = AutoTokenizer.from_pretrained("jinaai/jina-reranker-v2-base-multilingual", trust_remote_code=True)
 
 
-model = CrossEncoder(
-    "jinaai/jina-reranker-v2-base-multilingual",
-    automodel_args={"torch_dtype": "auto"},
-    trust_remote_code=True,
-    device=device,
-)
+def rank_with_onnx(query, documents):
+    """
+    Ранжирование документов с использованием ONNX-модели.
+    """
+    # Токенизация пар (query, document)
+    inputs = tokenizer(
+        [[query, doc] for doc in documents],
+        padding=True,
+        truncation=True,
+        max_length=512,
+        return_tensors="np",
+    )
+
+    # Преобразование типов данных для ONNX (int32 -> int64)
+    onnx_inputs = {
+        "input_ids": inputs["input_ids"].astype(np.int64),
+        "attention_mask": inputs["attention_mask"].astype(np.int64),
+    }
+
+    # Выполнение инференса ONNX
+    logits = onnx_session.run(None, onnx_inputs)[0]
+
+    # Ранжирование документов по убыванию логитов
+    scores = np.squeeze(logits, axis=1)
+    ranked_indices = np.argsort(-scores)
+
+    # Возвращаем документы с оценками и индексами
+    return [{"corpus_id": i, "text": documents[i], "score": scores[i]} for i in ranked_indices]
+
 
 def medical_retriever_function(query, array):
+    """
+    Основная функция для поиска и ранжирования медицинской информации.
+    """
     retriever = Retriever(
         model_type=DenseModelType.E5_LARGE,
         sparse_model_type=SparseModelType.BM42,
         localhost='77.234.216.100',
-        device=device,
+        device="cuda" if torch.cuda.is_available() else "cpu",
         dense_search=True,
         sparse_search=False,
     )
-    coll_name="medfusion"
+    coll_name = "medfusion"
+
+    # Поиск документов
     replies = retriever.search(
-        query = query,
+        query=query,
         collection_name=coll_name,
         topk=30,
         score_threshold=0.7,
     )
-    
+
     if replies:
-        rankings = model.rank(query, [doc[0].page_content for doc in replies], return_documents=True, convert_to_tensor=True)[:5]
-        
-        array.extend([[v for k,v in replies[ranking['corpus_id']][0].metadata.items() if k in ['title', 'authors', 'publication_date', 'doi_link']] for ranking in rankings])
-        #return '\n\n'.join([f"{ranking['text']}" for ranking in rankings])
-        return '\n\n'.join([f"Metadata: {[v for k,v in replies[ranking['corpus_id']][0].metadata.items() if k in ['title', 'authors', 'publication_date', 'doi_link']]}, Text: {ranking['text']}" for ranking in rankings])
+        print('start ranking')
+        documents = [doc[0].page_content for doc in replies]
+        rankings = rank_with_onnx(query, documents)[:5]
+        print('stop ranking')
+
+        # Извлечение метаданных и формирование ответа
+        array.extend([
+            [
+                v
+                for k, v in replies[ranking['corpus_id']][0].metadata.items()
+                if k in ['title', 'authors', 'publication_date', 'doi_link']
+            ]
+            for ranking in rankings
+        ])
+
+        # Формирование итогового ответа
+        return '\n\n'.join([
+            f"Metadata: {[v for k, v in replies[ranking['corpus_id']][0].metadata.items() if k in ['title', 'authors', 'publication_date', 'doi_link']]}, "
+            f"Text: {ranking['text']}"
+            for ranking in rankings
+        ])
 
     else:
         return 'There is no information for your request in database.'
@@ -78,15 +130,7 @@ def medical_article_retriever_function(query, array):
     )
 
     if replies:
-        print('______________')
-        print(replies)
-        print('+++++++++++++')
-        print(array)
-        print('--------------')
         array.extend([[v for k,v in reply[0].metadata.items() if k in ['title', 'authors', 'publication_date', 'doi_link']] for reply in replies])
-        print('##############')
-        print(array)
-        print('00000000000000')
         return '\n\n'.join([f"{reply[0].page_content}" for reply in replies])
     else:
         return 'There is no article for your request.'
@@ -165,12 +209,12 @@ You can't search using both filters at the same time. Only one!"""
         return self.medical_article_retriever_tool(query)
     
     def invoke(self, user_input:str, chat_history=''):
-        try:
+        #try:
             self.shared_array = []
             response = self._agent_executor({"input": user_input, 'chat_history': chat_history})['output']
             metadata = self.shared_array
             print(metadata)
 
             return response, list(set(tuple(i) for i in metadata))
-        except Exception as e:
-            return f"\nI'm sorry, I encountered an error while processing your request. Please try again.\nError: {e}\n", self.shared_array
+        # except Exception as e:
+        #     return f"\nI'm sorry, I encountered an error while processing your request. Please try again.\nError: {e}\n", self.shared_array
