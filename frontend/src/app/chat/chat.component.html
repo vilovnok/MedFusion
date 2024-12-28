@@ -4,8 +4,14 @@
             <h2>Assistant</h2>
             <div class="status-indicator">                                
                 <span [ngClass]="{'circle-red': !isPlaye, 'circle-green': isPlaye}" class="circle"></span>
-                <button style="cursor: pointer;" (click)="showDialog('1')">ввести новый ключ</button>
-                <button style="cursor: pointer; margin-left: 20px;" (click)="clearChat()">очистить чат</button>
+                <button style="cursor: pointer;" (click)="showDialog('1')">
+                    {{ isMobile ? 'новый ключ' : 'ввести новый ключ' }}
+                  </button>
+                  <button style="cursor: pointer; margin-left: 20px;" (click)="clearChat()">
+                    {{ isMobile ? 'очистить' : 'очистить чат' }}
+                  </button>
+                <!-- <button style="cursor: pointer;" (click)="showDialog('1')">ввести новый ключ</button>
+                <button style="cursor: pointer; margin-left: 20px;" (click)="clearChat()">очистить чат</button> -->
             </div>
         </div>
         <hr>
@@ -31,7 +37,7 @@
                         [ngClass]="{ 'liked': item.liked === true }">👍</button>
                     <button (click)="onDislike(item)" class="action-button"
                         [ngClass]="{ 'disliked': item.liked === false }">👎</button>
-                    <button class="toggle-button" (click)="OpinionDialog(item.id)">мнение</button>
+                    <button class="toggle-button" (click)="OpinionDialog(item.id)">обратная связь</button>
                 </div>
             </div>
             <div class="chat-typing " *ngIf="istyping">

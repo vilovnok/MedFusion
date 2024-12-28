@@ -140,7 +140,7 @@ You can't search using both filters at the same time. Only one!"""
             
             tools = [self.medical_retriever_tool, self.medical_article_retriever_tool]
             agent = create_react_agent(llm, tools, template)
-            _agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=False, handle_parsing_errors=True)
+            _agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True)
             return _agent_executor
         except Exception as err:
             raise ValueError(f'Что-то не так с параметрами модели: {err}')
