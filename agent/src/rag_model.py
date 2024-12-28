@@ -111,7 +111,7 @@ def medical_article_retriever_function(query, array):
         model_type=DenseModelType.E5_LARGE,
         sparse_model_type=SparseModelType.BM42,
         localhost='77.234.216.100',
-        device=device,
+        device="cuda" if torch.cuda.is_available() else "cpu",
         dense_search=True,
         sparse_search=False,#False
     )
