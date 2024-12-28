@@ -12,12 +12,11 @@ import ast
 import torch
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
 model = CrossEncoder(
     "jinaai/jina-reranker-v2-base-multilingual",
     automodel_args={"torch_dtype": "auto"},
     trust_remote_code=True,
-    device=device
+    device=device,
 )
 
 def medical_retriever_function(query, array):
@@ -78,6 +77,7 @@ def medical_article_retriever_function(query, array):
 
     if replies:
         array.extend([[v for k,v in reply[0].metadata.items() if k in ['title', 'authors', 'publication_date', 'doi_link']] for reply in replies])
+
         return '\n\n'.join([f"{reply[0].page_content}" for reply in replies])
     else:
         return 'There is no article for your request.'
