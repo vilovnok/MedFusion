@@ -11,7 +11,6 @@ import ast
 import onnxruntime as ort
 import numpy as np
 import torch
-<<<<<<< HEAD
 from transformers import AutoTokenizer
 
 
@@ -52,16 +51,6 @@ def rank_with_onnx(query, documents):
     # Возвращаем документы с оценками и индексами
     return [{"corpus_id": i, "text": documents[i], "score": scores[i]} for i in ranked_indices]
 
-=======
-
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = CrossEncoder(
-    "jinaai/jina-reranker-v2-base-multilingual",
-    automodel_args={"torch_dtype": "auto"},
-    trust_remote_code=True,
-    device=device,
-)
->>>>>>> 9f67937a34cfd13b2c97e6738eb6e3fa3a4f055e
 
 def medical_retriever_function(query, array):
     """
