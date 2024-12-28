@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, HostListener } from '@angular/core';
 import { ChatService } from '../services/chat.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../dialog/dialog.component';
@@ -50,7 +50,7 @@ export class ChatComponent implements OnInit {
   messages: { role: string; text: string; liked: boolean | null; collapsibleText?: string; isCollapsed?: boolean; id?: number  }[] = [
     {
       'role': 'ai',
-      'text': "Привет! Я MedFusion - твой персональный помощник по доказательной медицине.\n\nОсобенности:\n1) В моей базе данных содержатся только обзоры статей с сайта доказательной медицины [Cochrane Library][https://www.cochranelibrary.com/cdsr/table-of-contents], опубликованные с 2003 года по ноябрь 2024 года. В моей базе данных нет клинических рекомендаций, но я все равно постараюсь тебе помочь!\n2) Я умею отвечать на общие медицинские вопросы, а также искать информацию по конкретной статье (по точному названию или по ссылке на doi)\n3) В нашем диалоге я помню только последние три сообщения. Историю чата можно сбросить при нажатии кнопки clear \n4) По окончании диалога, пожалуйста оставьте обратную связь, нажав на 👍/👎",
+      'text': "Привет! Я MedFusion - твой персональный помощник по доказательной медицине.\n\nОсобенности: \n1) В моей базе данных содержатся только обзоры статей с сайта доказательной медицины Cochrane Library, опубликованные с 2003 года по ноябрь 2024 года. В моей базе данных нет клинических рекомендаций, но я все равно постараюсь тебе помочь! \n2) Я умею отвечать на общие медицинские вопросы, а также искать информацию по конкретной статье (по точному названию или по ссылке на doi). \n3) В нашем диалоге я помню только последние три сообщения. Историю чата можно сбросить при нажатии кнопки clear.\n4) По окончании диалога, пожалуйста оставьте обратную связь, нажав на 👍/👎 \n5) Я могу тратить до нескольких минут на ответ, поскольку очень тщательно ищу для вас информацию, прошу прощения за возможное длительное ожидание!",
       'liked': null,
     },
   ];
@@ -114,7 +114,7 @@ export class ChatComponent implements OnInit {
       await this.sleep(1000);
       this.istyping = false;
       const role = response['role']
-      const ai_text = response['ai_text'].trim().slice(0, response['ai_text'].trim().indexOf('**Ссылки**'))
+      const ai_text = response['ai_text'].replace(/Ссылки[\s\S]*/g, '');
       const liked = response['liked']
       const metadata = response['full_metadata']
       const id = response['id']
@@ -137,7 +137,7 @@ export class ChatComponent implements OnInit {
     
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '300px',
-      height: '360px',
+      height: '410px',
       data: {'text':text}
     });
 
@@ -207,7 +207,6 @@ export class ChatComponent implements OnInit {
   }
     this.service.handle_post_requests(reqBody, 'agent/get-messages').subscribe(response => {
       
-      console.log(response['messages'].posts)
       const sortedPosts = response['messages'].posts.sort((a: any, b: any) => {
         return a.id - b.id;
       });
@@ -217,7 +216,7 @@ export class ChatComponent implements OnInit {
           this.addMessage('human', message.human_text.trim());
         }
         if (message.ai_text) {
-          const ai_text = message.ai_text.trim().slice(0, message.ai_text.trim().indexOf('**Ссылки**'))
+          const ai_text = message.ai_text.replace(/Ссылки[\s\S]*/g, '');
           this.addMessage('ai', ai_text, message.liked, true, message.full_metadata, message.id);
         }
       });
@@ -253,10 +252,9 @@ export class ChatComponent implements OnInit {
 
 
   OpinionDialog(id: number=0) {
-    console.log(id);
     const dialogRef = this.dialog.open(DialogComponent, {
-      width: '300px',
-      height: '360px',
+      width: '280px',
+      height: '320px',
       data: {'text':'3'}
     });
 
@@ -271,9 +269,15 @@ export class ChatComponent implements OnInit {
           "message_id":id
         }
         this.service.handle_post_requests(reqBody, 'agent/add-opinion').subscribe(response => {
-
         });
-        
     });
+  }
+
+
+  isMobile = window.innerWidth <= 768;
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event): void {
+    this.isMobile = window.innerWidth <= 768;
   }
 }

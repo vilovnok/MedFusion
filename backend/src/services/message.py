@@ -55,7 +55,7 @@ class MessageService:
                 else:
                     full_metadata = None
                 
-                errors_to_ignore = ['Error response 401', 'Error response 429', 'error']                
+                errors_to_ignore = ['Error response 401', 'Error response 429','error']                
                 if any(error.lower() in response.lower() for error in errors_to_ignore):
                     continue
                 break
@@ -175,7 +175,6 @@ class MessageService:
                     "message":'Токен в базе есть!',
                     'token':token,
                 }
-
 
     async def add_opinion(self, uow: IUnitOfWork, data: AddOpinion):
         async with uow:
