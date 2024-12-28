@@ -258,8 +258,6 @@ hr {
 }
 
 
-
-/* Мобильная версия */
 @media (max-width: 768px) {
   .messages {
     width: 90%;
@@ -267,8 +265,6 @@ hr {
   }
 
   .messages-header {
-    // flex-direction: column;
-    // align-items: flex-end;
 
     h2 {
       font-size: 1.2em;
@@ -276,6 +272,18 @@ hr {
 
     .status-indicator {
       margin-top: 8px;
+
+      .status-indicator button:first-child::after {
+        content: "новый ключ";
+      }
+    
+      .status-indicator button:nth-child(2)::after {
+        content: "очистить"; 
+      }
+    
+      .status-indicator button {
+        font-size: 12px;
+      }
     }
   }
 
@@ -305,13 +313,13 @@ hr {
 
 
 .chatbox p a {
-  color: #3498db; /* Цвет ссылки */
-  text-decoration: none; /* Убрать подчеркивание */
+  color: #3498db;
+  text-decoration: none;
   font-weight: bold;
 }
 
 .chatbox p a:hover {
-  text-decoration: underline; /* Добавить подчеркивание при наведении */
+  text-decoration: underline;
 }
 
 

@@ -11,6 +11,8 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Setting up dependencies..."
+pip install sqlalchemy
+pip install asyncpg
 poetry install
 poetry shell
 

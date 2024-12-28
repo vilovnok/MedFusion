@@ -11,6 +11,7 @@ import ast
 import onnxruntime as ort
 import numpy as np
 import torch
+<<<<<<< HEAD
 from transformers import AutoTokenizer
 
 
@@ -51,6 +52,16 @@ def rank_with_onnx(query, documents):
     # Возвращаем документы с оценками и индексами
     return [{"corpus_id": i, "text": documents[i], "score": scores[i]} for i in ranked_indices]
 
+=======
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = CrossEncoder(
+    "jinaai/jina-reranker-v2-base-multilingual",
+    automodel_args={"torch_dtype": "auto"},
+    trust_remote_code=True,
+    device=device,
+)
+>>>>>>> 9f67937a34cfd13b2c97e6738eb6e3fa3a4f055e
 
 def medical_retriever_function(query, array):
     """
@@ -131,6 +142,10 @@ def medical_article_retriever_function(query, array):
 
     if replies:
         array.extend([[v for k,v in reply[0].metadata.items() if k in ['title', 'authors', 'publication_date', 'doi_link']] for reply in replies])
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9f67937a34cfd13b2c97e6738eb6e3fa3a4f055e
         return '\n\n'.join([f"{reply[0].page_content}" for reply in replies])
     else:
         return 'There is no article for your request.'
@@ -213,7 +228,6 @@ You can't search using both filters at the same time. Only one!"""
             self.shared_array = []
             response = self._agent_executor({"input": user_input, 'chat_history': chat_history})['output']
             metadata = self.shared_array
-            print(metadata)
 
             return response, list(set(tuple(i) for i in metadata))
         # except Exception as e:
