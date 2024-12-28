@@ -131,6 +131,7 @@ def medical_article_retriever_function(query, array):
 
     if replies:
         array.extend([[v for k,v in reply[0].metadata.items() if k in ['title', 'authors', 'publication_date', 'doi_link']] for reply in replies])
+
         return '\n\n'.join([f"{reply[0].page_content}" for reply in replies])
     else:
         return 'There is no article for your request.'
