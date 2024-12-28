@@ -17,7 +17,8 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Starting FastAPI agent..."
-poetry run python -m backend.src.main
+poetry run gunicorn -w 8 -k uvicorn.workers.UvicornWorker backend.src.main:app
+
 
 if [ $? -ne 0 ]; then
     echo "Error starting FastAPI. Check your application code."
