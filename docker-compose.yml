@@ -29,26 +29,6 @@ services:
       timeout: 5s
       retries: 5
 
-
-# # ДОРАБАТВАЕМ
-  # agent:
-  #   container_name: agent
-  #   build: .
-  #   environment:
-  #     - DATABASE_URL=postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}
-  #   depends_on:
-  #     - postgres
-
-  # qdrant:
-  #   container_name: qdrant
-  #   image: qdrant/qdrant:latest
-  #   ports:
-  #     - "6333:6333"
-  #   volumes:
-  #     - qdrant_storage:/qdrant/storage  
-
 volumes:
-  # qdrant_storage:
-  #   driver: local
   postgres_storage:
     driver: local
