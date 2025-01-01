@@ -1,5 +1,3 @@
 # bE3qXub1g7lA5QehZjV6fSezEdSkpRZH
 
-В docker-compose был удален medfusion
-
 ssh -i key-private dima@158.160.89.142
