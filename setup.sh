@@ -1,8 +1,6 @@
 #!/bin/bash
 
 echo "Installing Poetry..."
-python -m venv venv
-source venv/bin/activate
 pip install poetry
 
 if [ $? -ne 0 ]; then

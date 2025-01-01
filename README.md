@@ -68,15 +68,23 @@ git clone https://github.com/vilovnok/MedFusion.git && cd MedFusion
 ```bash
 chmod +x setup.sh run.sh
 ```
-3. Подгрузите все зависимости
+3. Создайте venv директорию
+```bash
+python -m venv venv
+```
+4. Активируйте venv директорию
+```bash
+source venv/bin/activate
+```
+5. Подгрузите все зависимости
 ```bash
 ./setup.sh
 ```
-4. Запускаем сервис
+6. Запускаем сервис
 ```bash
 ./run.sh
 ```
-4. Переходим на сервис
+7. Переходим на сервис
 ```bash
 http://127.0.0.1:7890
 ```
