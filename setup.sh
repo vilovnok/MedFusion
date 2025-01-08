@@ -12,7 +12,6 @@ echo "Setting up dependencies..."
 pip install sqlalchemy
 pip install asyncpg
 poetry install
-poetry shell
 
 if [ $? -ne 0 ]; then
     echo "Error installing dependencies."

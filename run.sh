@@ -17,7 +17,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Starting FastAPI agent..."
-poetry run gunicorn -w 8 -k uvicorn.workers.UvicornWorker backend.src.main:app --bind 0.0.0.0:8000 --timeout 360
+poetry run gunicorn -w 4 -k uvicorn.workers.UvicornWorker backend.src.main:app --bind 0.0.0.0:8000 --timeout 360
 
 
 if [ $? -ne 0 ]; then

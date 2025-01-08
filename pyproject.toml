@@ -1,11 +1,12 @@
 [tool.poetry]
-name = "medfusion"
+name = "agent"
 version = "0.1.0"
 description = ""
 authors = ["r1char9"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
+numpy = "^1.24"
 python = ">=3.10,<3.13"
 langchain = "^0.3.7"
 langchain-community = "^0.3.5"
